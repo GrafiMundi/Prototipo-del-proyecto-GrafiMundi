@@ -5,11 +5,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import servicios.UsuarioService;
 
 public class GrafiMundi extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
+        UsuarioService.cargarUsuarios();
+
         Parent root = FXMLLoader.load(getClass().getResource("/view/GrafiMundiView.fxml"));
 
         primaryStage.setTitle("GrafiMundi");

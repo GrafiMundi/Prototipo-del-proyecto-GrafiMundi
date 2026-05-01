@@ -40,12 +40,12 @@
                         <Insets top="40.0" />
                     </VBox.margin>
                     <children>
-                        <Button fx:id="btnLogin" prefWidth="140" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-radius: 5; -fx-background-radius: 5;" text="Iniciar Sesion" textFill="WHITE">
+                        <Button fx:id="btnLogin" onAction="#irLogin" prefWidth="140" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-radius: 5; -fx-background-radius: 5;" text="Iniciar Sesion" textFill="WHITE">
                             <font>
                                 <Font name="System Bold" size="13.0" />
                             </font>
                         </Button>
-                        <Button fx:id="btnRegistro" prefWidth="140" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-radius: 5; -fx-background-radius: 5;" text="Registrarse" textFill="WHITE">
+                        <Button fx:id="btnRegistro" onAction="#irRegistro" prefWidth="140" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-radius: 5; -fx-background-radius: 5;" text="Registrarse" textFill="WHITE">
                             <HBox.margin>
                                 <Insets left="10.0" />
                             </HBox.margin>
