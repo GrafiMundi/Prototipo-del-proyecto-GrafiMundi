@@ -1,16 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/26" fx:controller="controller.CatalogoController">
-   <children>
-      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="143.0" layoutY="174.0" text="Trabajo en progreso " textAlignment="CENTER">
-         <font>
-            <Font size="36.0" />
-         </font>
-      </Label>
-   </children>
-</AnchorPane>
+<BorderPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CatalogoController">
+    <!-- nombre de la tienda -->
+    <top>
+        <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-background-color: #a8c69f; -fx-padding: 10;">
+            <Label text="GrafiMundi">
+                <font>
+                    <Font size="18"/>
+                </font>
+            </Label>
+            <Region HBox.hgrow="ALWAYS"/>
+            <TextField promptText="Buscar productos..." prefWidth="250"/>
+            <Button text="Buscar"/>
+            <Button text="Carrito"/>
+            <Button text="Favoritos"/>
+            <MenuButton text="Usuario">
+                <items>
+                    <MenuItem text="Perfil"/>
+                    <MenuItem text="Cerrar sesión"/>
+                </items>
+            </MenuButton>
+        </HBox>
+    </top>
+    <!-- contenido -->
+    <center>
+        <VBox spacing="20" style="-fx-padding: 20;">
+            <!-- mensaje de bienvenida -->
+            <Label text="Bienvenido a GrafiMundi">
+                <font>
+                    <Font size="16"/>
+                </font>
+            </Label>
+            <!-- filtros (aun no funcional) -->
+            <HBox spacing="10" alignment="CENTER_RIGHT">
+                <Label text="Filtrar por:"/>
+                <Button text="Precio"/>
+                <Button text="Marca"/>
+            </HBox>
+            <!-- productos dinamicos -->
+            <ScrollPane fitToWidth="true">
+                <content>
+                    <FlowPane fx:id="contenedorGraficas" hgap="20" vgap="20" prefWidth="900" style="-fx-padding: 10;">
+                    </FlowPane>
+                </content>
+            </ScrollPane>
+        </VBox>
+    </center>
+    <!-- mensaje en el final de la tienda -->
+    <bottom>
+        <HBox style="-fx-background-color: #f5f5f5; -fx-padding: 10;">
+            <Label text="© 2026 GrafiMundi Colombia"/>
+        </HBox>
+    </bottom>
+</BorderPane>

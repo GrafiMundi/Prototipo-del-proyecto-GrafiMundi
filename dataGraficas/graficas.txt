@@ -1,0 +1,16 @@
+001;MSI GeForce RTX 4090 SUPRIM 24GB GDDR6X;13295936;Tarjeta grafica de ultra alto rendimiento ideal para gaming extremo;NVIDIA;5;001.png
+002;AMD Radeon RX 7900 XTX Phantom Gaming 24GB OC;11500000;Alto rendimiento con arquitectura avanzada para juegos;AMD;5;002.png
+003;Intel Arc A770 Limited Edition 16GB PCI Express 4.0;7000000;Grafica moderna de Intel ideal para gaming y creacion;INTEL;5;003.png
+004;AORUS Radeon RX 6900 XT Waterforce 16GB;13359000;Sistema de refrigeracion liquida para maximo rendimiento;AMD;5;004.png
+005;Gigabyte GeForce 700 Series GT 710 2GB;339000;Grafica economica ideal para tareas basicas;NVIDIA;5;005.png
+006;Gigabyte GeForce RTX 5070;2320409;Alto rendimiento con nuevas tecnologias graficas;NVIDIA;5;006.png
+007;NVIDIA GeForce RTX 5050 Dual Fan 8GB;1130998;Ideal para gaming moderno con buen rendimiento;NVIDIA;5;007.png
+008;ASRock Intel Arc A580 Challenger 8GB GDDR6;1864621;Excelente equilibrio entre precio y rendimiento;INTEL;5;008.png
+009;MSI GT 1030 4GB DDR4 OC;610258;Grafica de entrada para uso basico y multimedia;NVIDIA;5;009.png
+010;XFX Speedster Quick 319 RX 7700 XT 12GB;2660000;Potente grafica para gaming exigente;AMD;5;010.png
+011;Radeon RX 7600 Gaming OC 8GB GDDR6;1620000;Perfecta para 1080p y 1440p;AMD;5;011.png
+012;Intel Arc A580 8GB GDDR6 OC 12GB;2300000;Grafica de gama media con buen rendimiento;INTEL;5;012.png
+013;Xplai GT730 4GB DDR3 128bit;162000;Grafica economica para tareas simples;NVIDIA;5;013.png
+014;RX 580 8GB DDR5 256bit;521700;Grafica potente de generacion anterior;AMD;5;014.png
+015;RX 550 Low Profile 4GB GDDR5;643740;Ideal para equipos compactos y bajo consumo;AMD;5;015.png
+016;MSI Gaming GeForce RTX 2070 Super 8GB GDDR6;1201543;Excelente rendimiento en juegos actuales;NVIDIA;5;016.png
