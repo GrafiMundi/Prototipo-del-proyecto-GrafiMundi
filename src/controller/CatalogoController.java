@@ -3,16 +3,24 @@ package controller;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.control.Label;
+import javafx.geometry.Side;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import model.*;
 import servicios.GraficaService;
+import servicios.UsuarioService;
 
 public class CatalogoController implements Initializable {
 
@@ -20,50 +28,155 @@ public class CatalogoController implements Initializable {
     @FXML
     private FlowPane contenedorGraficas;
 
+    // boton del usuario
+    @FXML
+    private Button btnUsuario;
+
     // lista que almacena las gráficas cargadas desde el archivo
     private ListaGraficas lista;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        // mensaje de prueba para verificar que el controlador se ejecuta
+        // mensaje de prueba
         System.out.println("inicializando catalogo");
 
-        // carga los productos desde el archivo de texto
+        // carga las graficas desde el archivo
         lista = GraficaService.cargarLista();
 
-        // verifica si la lista está vacía o no se cargó correctamente
+        // verifica si la lista fue cargada correctamente
         if (lista == null || lista.inicio == null) {
-            System.out.println("la lista está vacía o no se cargó");
+
+            System.out.println("la lista esta vacia o no se cargo");
         }
 
-        // muestra los productos en pantalla
+        // verifica si hay un usuario logueado
+        if (UsuarioService.getUsuarioActual() != null) {
+
+            // obtiene el nombre del usuario
+            String nombreUsuario
+                    = UsuarioService.getUsuarioActual().getUsername();
+
+            // cambia el texto del boton
+            btnUsuario.setText(nombreUsuario);
+
+            // crear menu flotante
+            crearMenuUsuario(nombreUsuario);
+        }
+
+        // mostrar productos
         mostrarGraficas();
     }
 
-    // recorre la lista y crea una tarjeta visual por cada producto
+    // crea el menu flotante del usuario
+    private void crearMenuUsuario(String nombreUsuario) {
+
+        // menu flotante
+        ContextMenu menu = new ContextMenu();
+
+        // agregar clase css al menu
+        menu.getStyleClass().add("menu-usuario");
+
+        // mensaje superior
+        MenuItem saludo = new MenuItem(
+                "Es un gusto volver a verte " + nombreUsuario
+        );
+
+        // desactivar clic del saludo
+        saludo.setDisable(true);
+
+        // clases css
+        saludo.getStyleClass().add("saludo-menu");
+
+        // item dinamico
+        MenuItem opcionPrincipal = new MenuItem();
+
+        opcionPrincipal.getStyleClass().add("item-menu");
+
+        // obtiene el rol del usuario
+        String rol = UsuarioService
+                .getUsuarioActual()
+                .getRol();
+
+        // verifica si es admin
+        if (rol.equalsIgnoreCase("admin")) {
+
+            // cambia texto para admin
+            opcionPrincipal.setText("Agregar Producto");
+
+            // accion admin
+            opcionPrincipal.setOnAction(e -> {
+
+                System.out.println(
+                        "abrir panel agregar producto"
+                );
+            });
+
+        } else {
+
+            // texto normal para clientes
+            opcionPrincipal.setText("Historial");
+
+            // accion historial
+            opcionPrincipal.setOnAction(e -> {
+
+                System.out.println("abrir historial");
+            });
+        }
+
+        // opcion cerrar sesion
+        MenuItem cerrar = new MenuItem("Cerrar sesión");
+
+        cerrar.getStyleClass().add("item-cerrar");
+
+        // accion cerrar sesion
+        cerrar.setOnAction(e -> {
+
+            cerrarSesion();
+        });
+
+        // agregar elementos
+        menu.getItems().addAll(
+                saludo,
+                new SeparatorMenuItem(),
+                opcionPrincipal,
+                cerrar
+        );
+
+        // mostrar menu debajo del boton
+        btnUsuario.setOnAction(e -> {
+
+            menu.show(btnUsuario, Side.BOTTOM, 0, 5);
+        });
+    }
+
+    // recorre la lista y crea las cards
     private void mostrarGraficas() {
 
-        // limpia el contenedor antes de volver a mostrar
+        // limpia el contenedor
         contenedorGraficas.getChildren().clear();
 
-        // si no hay datos, muestra un mensaje
+        // verifica si la lista esta vacia
         if (lista == null || lista.inicio == null) {
-            Label vacio = new Label("no hay productos disponibles");
+
+            Label vacio = new Label(
+                    "no hay productos disponibles"
+            );
+
             contenedorGraficas.getChildren().add(vacio);
+
             return;
         }
 
-        // recorre la lista enlazada
+        // recorre la lista doblemente enlazada
         nodoGraficas aux = lista.inicio;
 
         while (aux != null) {
 
-            // mensaje de prueba para ver qué productos se están mostrando
-            System.out.println("mostrando: " + aux.nombre);
-
-            // crea la tarjeta del producto y la agrega al contenedor
+            // crea la card del producto
             VBox card = crearCard(aux);
+
+            // agrega la card al contenedor
             contenedorGraficas.getChildren().add(card);
 
             aux = aux.sig;
@@ -77,73 +190,125 @@ public class CatalogoController implements Initializable {
         ImageView img = new ImageView();
 
         try {
-            // construye la ruta de la imagen
-            String ruta = "/ImagenesGrafiMundi/" + g.imagen;
 
-            // carga la imagen 
+            // construye la ruta de la imagen
+            String ruta
+                    = "/ImagenesGrafiMundi/" + g.imagen;
+
+            // carga la imagen
             Image image = new Image(
-                getClass().getResource(ruta).toExternalForm()
+                    getClass()
+                            .getResource(ruta)
+                            .toExternalForm()
             );
 
             img.setImage(image);
 
         } catch (Exception e) {
-            // mensaje en caso de error al cargar la imagen
-            System.out.println("error cargando imagen: " + g.imagen);
+
+            System.out.println(
+                    "error cargando imagen: " + g.imagen
+            );
         }
 
-        // tamaño de la imagen
+        // tamaño imagen
         img.setFitWidth(120);
         img.setFitHeight(100);
 
         // nombre del producto
         Label nombre = new Label(g.nombre);
+
         nombre.setWrapText(true);
 
-        // precio del producto
-        Label precio = new Label("$" + String.format("%,.0f", g.precio));
+        // precio
+        Label precio = new Label(
+                "$ " + String.format("%,.0f", g.precio)
+        );
 
-        // cantidad disponible
-        Label stock = new Label("stock: " + g.cantidad);
+        // stock disponible
+        Label stock = new Label(
+                "stock: " + g.cantidad
+        );
 
-        // botón para comprar
-        Button btn = new Button("comprar");
+        // boton comprar
+        Button btn = new Button("Comprar");
 
-        // acción del botón
+        btn.getStyleClass().add("boton-comprar");
+
+        // accion de compra
         btn.setOnAction(e -> {
 
-            // verifica si hay stock disponible
+            // verifica si hay stock
             if (g.cantidad > 0) {
 
-                // reduce la cantidad en uno
+                // reduce stock
                 g.cantidad--;
 
-                System.out.println("compraste: " + g.nombre);
-                System.out.println("stock restante: " + g.cantidad);
-
-                // guarda los cambios en el archivo
+                // guarda cambios en el archivo
                 GraficaService.guardarLista(lista);
 
-                // actualiza la vista del catálogo
+                // refresca el catalogo
                 mostrarGraficas();
 
             } else {
+
                 System.out.println("sin stock");
             }
         });
 
+        // card principal
         VBox card = new VBox(8);
 
-        card.getChildren().addAll(img, nombre, precio, stock, btn);
-
-        card.setStyle(
-            "-fx-border-color: black;" +
-            "-fx-padding: 10;" +
-            "-fx-background-color: #f5f5f5;"
+        card.getChildren().addAll(
+                img,
+                nombre,
+                precio,
+                stock,
+                btn
         );
 
-        card.setPrefWidth(150);
+        // estilos css
+        card.getStyleClass().add("card-producto");
+
+        // ancho card
+        card.setPrefWidth(180);
 
         return card;
+    }
+
+    // metodo para cerrar sesion
+    private void cerrarSesion() {
+
+        try {
+
+            // elimina la sesion actual
+            UsuarioService.setUsuarioActual(null);
+
+            // carga la vista principal
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/view/GrafiMundiView.fxml")
+            );
+
+            Parent root = loader.load();
+
+            // obtiene la ventana actual
+            Stage stage = (Stage) contenedorGraficas
+                    .getScene()
+                    .getWindow();
+
+            // cambia la escena
+            stage.setScene(new Scene(root));
+
+            // centrar ventana
+            stage.centerOnScreen();
+
+            stage.show();
+
+        } catch (Exception e) {
+
+            System.out.println("error al cerrar sesion");
+
+            e.printStackTrace();
+        }
     }
 }

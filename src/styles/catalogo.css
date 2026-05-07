@@ -1,0 +1,220 @@
+/* estilo general */
+.root {
+    -fx-font-family: "Segoe UI";
+    -fx-background-color: #f8f9fa;
+}
+
+/* barra superior */
+.topbar {
+    -fx-background-color: #a8c69f;
+    -fx-padding: 12;
+}
+
+/* titulo */
+.titulo {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+/* botones superiores */
+.boton-topbar {
+
+    -fx-background-color: #2f3e46;
+
+    -fx-text-fill: white;
+
+    -fx-font-weight: bold;
+
+    -fx-background-radius: 12;
+
+    -fx-border-radius: 12;
+
+    -fx-padding: 7 15 7 15;
+
+    -fx-cursor: hand;
+}
+
+.boton-topbar:hover {
+
+    -fx-background-color: #354f52;
+}
+
+/* boton usuario */
+.boton-usuario {
+
+    -fx-background-color: #2f3e46;
+
+    -fx-text-fill: white;
+
+    -fx-font-size: 15px;
+
+    -fx-font-weight: bold;
+
+    -fx-background-radius: 12;
+
+    -fx-border-radius: 12;
+
+    -fx-padding: 7 15 7 15;
+
+    -fx-cursor: hand;
+}
+
+.boton-usuario:hover {
+
+    -fx-background-color: #354f52;
+}
+
+/* contenedor bienvenida */
+.contenedor-bienvenida {
+
+    -fx-max-width: 850;
+}
+
+/* descripcion bienvenida */
+.descripcion-bienvenida {
+
+    -fx-fill: #555555;
+
+    -fx-font-size: 12px;
+
+    -fx-font-weight: bold;
+}
+
+/* cards */
+.card-producto {
+
+    -fx-background-color: white;
+
+    -fx-background-radius: 15;
+
+    -fx-border-radius: 15;
+
+    -fx-border-color: #dddddd;
+
+    -fx-padding: 12;
+}
+
+/* boton comprar */
+.boton-comprar {
+
+    -fx-background-color: #52796f;
+
+    -fx-text-fill: white;
+
+    -fx-font-weight: bold;
+
+    -fx-background-radius: 10;
+
+    -fx-cursor: hand;
+}
+
+.boton-comprar:hover {
+
+    -fx-background-color: #3d5a52;
+}
+
+/* footer */
+.footer {
+
+    -fx-background-color: #eeeeee;
+
+    -fx-padding: 10;
+}
+
+/* menu flotante usuario */
+
+.context-menu {
+
+    -fx-background-color: white;
+
+    -fx-background-radius: 15;
+
+    -fx-border-radius: 15;
+
+    -fx-border-color: #dddddd;
+
+    -fx-padding: 15;
+
+    -fx-effect: dropshadow(
+        gaussian,
+        rgba(0,0,0,0.15),
+        15,
+        0,
+        0,
+        4
+        );
+}
+
+.separator {
+
+    -fx-padding: 0;
+
+    -fx-opacity: 0;
+}
+
+/* saludo usuario */
+.menu-item.saludo-menu {
+
+    -fx-background-color: white;
+
+    -fx-background-radius: 12;
+
+    -fx-padding: 16;
+}
+
+.menu-item.saludo-menu .label {
+
+    -fx-text-fill: black;
+
+    -fx-font-size: 15px;
+
+    -fx-font-weight: 900;
+}
+
+/* historial */
+.menu-item.item-menu {
+
+    -fx-background-color: transparent;
+
+    -fx-background-radius: 12;
+
+    -fx-padding: 18 12 18 12;
+}
+
+.menu-item.item-menu .label {
+
+    -fx-text-fill: black;
+
+    -fx-font-size: 17px;
+
+    -fx-font-weight: bold;
+}
+
+.menu-item.item-menu:focused {
+
+    -fx-background-color: #f2f2f2;
+}
+
+/* cerrar sesion */
+.menu-item.item-cerrar {
+
+    -fx-background-color: #ff1a1a;
+
+    -fx-background-radius: 12;
+
+    -fx-padding: 18 12 18 12;
+}
+
+.menu-item.item-cerrar .label {
+
+    -fx-text-fill: white;
+
+    -fx-font-size: 17px;
+
+    -fx-font-weight: bold;
+}
+
+.menu-item.item-cerrar:focused {
+
+    -fx-background-color: #e60000;
+}

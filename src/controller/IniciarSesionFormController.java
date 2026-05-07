@@ -2,15 +2,21 @@ package controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import servicios.UsuarioService;
 import model.Usuario;
 
@@ -40,101 +46,140 @@ public class IniciarSesionFormController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        // metodos para mostrar o ocultar contraseñas
+        // mostrar u ocultar contraseña
         checkVerContraseñaInicio.setOnAction(e -> {
+
             if (checkVerContraseñaInicio.isSelected()) {
-                txtContraseñaInicioMask.setText(txtContraseñaInicio.getText());
+                txtContraseñaInicioMask.setText(
+                        txtContraseñaInicio.getText()
+                );
                 txtContraseñaInicioMask.setVisible(true);
                 txtContraseñaInicio.setVisible(false);
             } else {
-                txtContraseñaInicio.setText(txtContraseñaInicioMask.getText());
+
+                txtContraseñaInicio.setText(
+                        txtContraseñaInicioMask.getText()
+                );
+
                 txtContraseñaInicio.setVisible(true);
                 txtContraseñaInicioMask.setVisible(false);
             }
         });
 
+        // accion boton ingresar
         btnIngresarInicioS.setOnAction(this::login);
+
+        // accion boton limpiar
         btnLimpiarInicioS.setOnAction(e -> limpiar());
+        Platform.runLater(() -> {
+            txtUsuarioIniciarSesion.requestFocus();
+        });
     }
 
-    // metodo que valida los datos y verifica las credenciales del usuario
+    // metodo que valida el login
     private void login(ActionEvent event) {
-        
-        // metodo que obtiene los datos ingresados
-        String usuario = txtUsuarioIniciarSesion.getText();
-        
-        // metodo que obtiene la contraseña dependiendo si esta oculta o no
-        String contraseña = txtContraseñaInicio.isVisible()
+
+        // obtener usuario
+        String usuario
+                = txtUsuarioIniciarSesion.getText();
+
+        // obtener contraseña dependiendo del campo visible
+        String contraseña
+                = txtContraseñaInicio.isVisible()
                 ? txtContraseñaInicio.getText()
                 : txtContraseñaInicioMask.getText();
 
-        // validacion de campos vacios
+        // validar campos vacios
         if (usuario.isEmpty() || contraseña.isEmpty()) {
+
             mostrarAlerta("Error", "Campos vacíos");
+
             return;
         }
 
-        Usuario user = UsuarioService.login(usuario, contraseña);
+        // validar credenciales
+        Usuario user
+                = UsuarioService.login(usuario, contraseña);
 
+        // si las credenciales son correctas
         if (user != null) {
 
-            if (user.getRol().equals("admin")) {
-                
-                // mensaje de bienvenida para admin (temporal)
-                mostrarAlerta("Bienvenido", "Ingresaste como ADMIN");
+            // guardar sesion
+            UsuarioService.setUsuarioActual(user);
 
-                // cambiar a vista admin (al mismo catálogo por ahora)
-                cambiarVista("/view/Catalogo.fxml", event);
+            // mensaje personalizado
+            mostrarAlerta(
+                    "Bienvenido",
+                    "Bienvenido " + user.getUsername()
+            );
 
-            } else {
-                
-                // mensaje de bienvenida para cliente (temporal)
-                mostrarAlerta("Bienvenido", "Ingresaste como CLIENTE");
-
-                // cambiar al catálogo
-                cambiarVista("/view/Catalogo.fxml", event);
-            }
+            // abrir catalogo maximizado
+            cambiarVista(
+                    "/view/Catalogo.fxml",
+                    event
+            );
 
         } else {
+
+            // credenciales incorrectas
             mostrarAlerta("Error", "Usuario o contraseña incorrectos");
         }
     }
-        
-    // método que cambia de ventana cargando un archivo fxml
-    private void cambiarVista(String rutaFXML, ActionEvent event) {
+
+    // metodo para cambiar de ventana
+    private void cambiarVista(
+            String rutaFXML,
+            ActionEvent event
+    ) {
+
         try {
-            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
-                    getClass().getResource(rutaFXML)
-            );
 
-            javafx.scene.Parent root = loader.load();
+            FXMLLoader loader
+                    = new FXMLLoader(
+                            getClass().getResource(rutaFXML)
+                    );
 
-            javafx.stage.Stage stage = (javafx.stage.Stage) ((javafx.scene.Node) event.getSource())
-                    .getScene().getWindow();
+            Parent root = loader.load();
+            Stage stage
+                    = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
 
-            stage.setScene(new javafx.scene.Scene(root));
+            // abrir maximizado
+            stage.setMaximized(true);
+
             stage.show();
 
         } catch (Exception e) {
-            // imprime el error si falla la carga del fxml
+
+            System.out.println(
+                    "error al cambiar de vista"
+            );
+
             e.printStackTrace();
         }
     }
-    
-    // metodo que limpia todos los campos del formulario.
+
+    // limpiar campos
     private void limpiar() {
         txtUsuarioIniciarSesion.clear();
         txtContraseñaInicio.clear();
         txtContraseñaInicioMask.clear();
+        txtUsuarioIniciarSesion.requestFocus();
     }
 
-    // metodo que muestra las alertas en caso que ocurra algun error en alguna de las validaciones
-    private void mostrarAlerta(String titulo, String mensaje) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    // mostrar alertas
+    private void mostrarAlerta(
+            String titulo,
+            String mensaje
+    ) {
+
+        Alert alert
+                = new Alert(Alert.AlertType.INFORMATION);
+
         alert.setTitle(titulo);
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
-
     }
 }

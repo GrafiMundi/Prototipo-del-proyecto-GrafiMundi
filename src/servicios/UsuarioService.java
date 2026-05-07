@@ -9,7 +9,20 @@ public class UsuarioService {
 
     // lista en memoria donde se almacenan los usuarios
     private static final ArrayList<Usuario> usuarios = new ArrayList<>();
-    
+
+    // usuario que tiene la sesión iniciada actualmente
+    private static Usuario usuarioActual;
+
+    // retorna el usuario que tiene la sesion iniciada
+    public static Usuario getUsuarioActual() {
+        return usuarioActual;
+    }
+
+    // cambia el usuario actual de la sesion
+    public static void setUsuarioActual(Usuario usuario) {
+        usuarioActual = usuario;
+    }
+
     // ruta del archivo donde se guardan los usuarios
     private static final String ARCHIVO = "data/usuarios.txt";
 
@@ -19,39 +32,51 @@ public class UsuarioService {
 
         File archivo = new File(ARCHIVO);
 
-        // verifica si la carpeta existe, sino existe la crea
         try {
+
             File carpeta = archivo.getParentFile();
-            
+
+            // crear carpeta si no existe
             if (carpeta != null && !carpeta.exists()) {
                 carpeta.mkdirs();
             }
 
-            // si el archivo no existe, lo crea con datos iniciales (los usuarios de prueba)
+            // crear archivo con usuarios iniciales
             if (!archivo.exists()) {
+
                 archivo.createNewFile();
 
                 try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivo))) {
+
                     bw.write("admin@gmail.com,admin,1234,admin");
                     bw.newLine();
+
                     bw.write("cliente@gmail.com,cliente,1234,cliente");
                     bw.newLine();
                 }
             }
-
-            // lectura del archivo línea por línea
+            // leer archivo
             BufferedReader br = new BufferedReader(new FileReader(archivo));
+
             String linea;
 
             while ((linea = br.readLine()) != null) {
+
                 String[] datos = linea.split(",");
 
-                // verifica que la línea tenga los 3 datos necesarios (Nombre de usuario, Contraseña y su Rol)
+                // validar que tenga todos los datos
                 if (datos.length == 4) {
-                    usuarios.add(new Usuario(datos[0], datos[1], datos[2], datos[3]));
+
+                    usuarios.add(
+                            new Usuario(
+                                    datos[0],
+                                    datos[1],
+                                    datos[2],
+                                    datos[3]
+                            )
+                    );
                 }
             }
-
             br.close();
 
         } catch (Exception e) {
@@ -64,7 +89,7 @@ public class UsuarioService {
         String regex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
         return email.matches(regex);
     }
-    
+
     // metodo que verifica si el usuario ya existe en la lista, retorna true en caso que exista y false si no
     public static boolean usuarioExiste(String username) {
         return usuarios.stream()
@@ -76,7 +101,7 @@ public class UsuarioService {
         return usuarios.stream()
                 .anyMatch(u -> u.getEmail().equals(email));
     }
-    
+
     // metodo que agrega un nuevo usuario tanto a la lista en memoria como al archivo de texto
     public static void agregarUsuario(Usuario usuario) {
         usuarios.add(usuario);
@@ -104,9 +129,25 @@ public class UsuarioService {
 
     // este metodo verifica las credenciales de un usuario (Usuario y Contraseña) retorna un usuario si las credenciales son correctas y retorna null en caso que no
     public static Usuario login(String username, String password) {
-        return usuarios.stream()
-                .filter(u -> u.getUsername().equals(username) && u.getPassword().equals(password))
+
+        Usuario user = usuarios.stream()
+                .filter(u
+                        -> u.getUsername().equals(username)
+                && u.getPassword().equals(password)
+                )
                 .findFirst()
                 .orElse(null);
+
+        // guardar usuario actual si el login es correcto
+        if (user != null) {
+            usuarioActual = user;
+        }
+
+        return user;
+    }
+
+    // cerrar sesión
+    public static void cerrarSesion() {
+        usuarioActual = null;
     }
 }
