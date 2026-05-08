@@ -19,6 +19,8 @@ public class GrafiMundi extends Application {
 
         primaryStage.setTitle("GrafiMundi");
         primaryStage.setScene(new Scene(root));
+        primaryStage.setMinWidth(1200);
+        primaryStage.setMinHeight(700);
         primaryStage.show();
     }
 
@@ -27,4 +29,4 @@ public class GrafiMundi extends Application {
     }
 }
 
-/* Autores: Coolin Jimenez, Alejandro Ballesteros, Pedro Sierra, Juan Arteaga */
+/* Autores: Coolin Jimenez, Alejandro Ballesteros, Pedro Sierra, Juan Arteaga, Mariana Lopez*/

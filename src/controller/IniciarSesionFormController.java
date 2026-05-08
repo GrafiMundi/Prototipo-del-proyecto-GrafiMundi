@@ -108,16 +108,10 @@ public class IniciarSesionFormController implements Initializable {
             UsuarioService.setUsuarioActual(user);
 
             // mensaje personalizado
-            mostrarAlerta(
-                    "Bienvenido",
-                    "Bienvenido " + user.getUsername()
-            );
+            mostrarAlerta("Bienvenido", "Bienvenido " + user.getUsername());
 
             // abrir catalogo maximizado
-            cambiarVista(
-                    "/view/Catalogo.fxml",
-                    event
-            );
+            cambiarVista("/view/Catalogo.fxml", event);
 
         } else {
 
@@ -127,35 +121,34 @@ public class IniciarSesionFormController implements Initializable {
     }
 
     // metodo para cambiar de ventana
-    private void cambiarVista(
-            String rutaFXML,
-            ActionEvent event
-    ) {
+    private void cambiarVista(String rutaFXML, ActionEvent event) {
 
         try {
 
-            FXMLLoader loader
-                    = new FXMLLoader(
-                            getClass().getResource(rutaFXML)
-                    );
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource(rutaFXML)
+            );
 
             Parent root = loader.load();
-            Stage stage
-                    = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
 
-            // abrir maximizado
-            stage.setMaximized(true);
+            // cerrar ventana actual (login)
+            Stage stageActual = (Stage) ((Node) event.getSource())
+                    .getScene()
+                    .getWindow();
 
-            stage.show();
+            stageActual.close();
+
+            Stage nuevoStage = new Stage();
+
+            nuevoStage.setScene(new Scene(root));
+
+            nuevoStage.setMaximized(true);
+
+            nuevoStage.show();
 
         } catch (Exception e) {
 
-            System.out.println(
-                    "error al cambiar de vista"
-            );
-
+            System.out.println("error al cambiar de vista");
             e.printStackTrace();
         }
     }

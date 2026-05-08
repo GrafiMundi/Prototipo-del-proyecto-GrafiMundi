@@ -18,6 +18,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.Priority;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.HBox;
 import model.*;
 import servicios.GraficaService;
 import servicios.UsuarioService;
@@ -35,8 +41,13 @@ public class CatalogoController implements Initializable {
     // lista que almacena las gráficas cargadas desde el archivo
     private ListaGraficas lista;
 
+    @FXML
+    private ScrollPane scrollPane;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
+        scrollPane.setFitToWidth(true);
 
         // mensaje de prueba
         System.out.println("inicializando catalogo");
@@ -186,16 +197,23 @@ public class CatalogoController implements Initializable {
     // crea la tarjeta visual de cada producto
     private VBox crearCard(nodoGraficas g) {
 
+        // contenedor principal
+        VBox card = new VBox(10);
+        card.getStyleClass().add("card-producto");
+
+        card.setPrefWidth(328);
+        card.setMinWidth(328);
+        card.setMaxWidth(328);
+        card.setPrefHeight(592);
+        card.setMaxHeight(592);
+
         // imagen del producto
         ImageView img = new ImageView();
 
         try {
 
-            // construye la ruta de la imagen
-            String ruta
-                    = "/ImagenesGrafiMundi/" + g.imagen;
+            String ruta = "/ImagenesGrafiMundi/" + g.imagen;
 
-            // carga la imagen
             Image image = new Image(
                     getClass()
                             .getResource(ruta)
@@ -206,48 +224,65 @@ public class CatalogoController implements Initializable {
 
         } catch (Exception e) {
 
-            System.out.println(
-                    "error cargando imagen: " + g.imagen
-            );
+            System.out.println("error cargando imagen: " + g.imagen);
         }
 
-        // tamaño imagen
-        img.setFitWidth(120);
-        img.setFitHeight(100);
+        // tamaño imagen 
+        img.setFitWidth(302);
+        img.setFitHeight(242);
+        img.setPreserveRatio(false);
 
-        // nombre del producto
+        //nombre
         Label nombre = new Label(g.nombre);
-
         nombre.setWrapText(true);
+        nombre.setMinHeight(40);
+        nombre.setMaxHeight(40);
+        nombre.getStyleClass().add("nombre-producto");
 
-        // precio
+        VBox.setMargin(nombre, new Insets(43, 0, 0, 0));
+
+        //precio
         Label precio = new Label(
                 "$ " + String.format("%,.0f", g.precio)
         );
+        precio.getStyleClass().add("precio-producto");
 
-        // stock disponible
+        VBox.setMargin(precio, new Insets(32, 0, 0, 0));
+
+        // stock
         Label stock = new Label(
-                "stock: " + g.cantidad
+                "Stock: " + g.cantidad
+        );
+        stock.getStyleClass().add("stock-producto");
+
+        // descripcion
+        String desc = (g.descripcion != null) ? g.descripcion : "";
+
+        Label descripcion = new Label(desc);
+
+        descripcion.setWrapText(true);
+        descripcion.setMaxWidth(280);
+        descripcion.setMinHeight(60);
+        descripcion.setMaxHeight(60);
+
+        descripcion.setStyle(
+                "-fx-text-overrun: ellipsis;"
         );
 
-        // boton comprar
-        Button btn = new Button("Comprar");
+        descripcion.getStyleClass().add("descripcion-producto");
 
+        // boton comprar
+        Button btn = new Button("Agregar al carrito");
         btn.getStyleClass().add("boton-comprar");
 
-        // accion de compra
         btn.setOnAction(e -> {
 
-            // verifica si hay stock
             if (g.cantidad > 0) {
 
-                // reduce stock
                 g.cantidad--;
 
-                // guarda cambios en el archivo
                 GraficaService.guardarLista(lista);
 
-                // refresca el catalogo
                 mostrarGraficas();
 
             } else {
@@ -256,22 +291,34 @@ public class CatalogoController implements Initializable {
             }
         });
 
-        // card principal
-        VBox card = new VBox(8);
-
-        card.getChildren().addAll(
-                img,
+        // cotenedor interno para ordenar mejor
+        VBox info = new VBox(6);
+        info.getChildren().addAll(
                 nombre,
                 precio,
                 stock,
-                btn
+                descripcion
         );
 
-        // estilos css
-        card.getStyleClass().add("card-producto");
+        Region spacer = new Region();
+        VBox.setVgrow(spacer, Priority.ALWAYS);
 
-        // ancho card
-        card.setPrefWidth(180);
+        // boton favoritos
+        Button favBtn = new Button("Favoritos");
+        favBtn.getStyleClass().add("boton-favorito");
+
+        // contenedor de botones
+        HBox botones = new HBox(10);
+        botones.setAlignment(Pos.CENTER_LEFT);
+        botones.getChildren().addAll(favBtn, btn);
+
+        // agregar todo
+        card.getChildren().addAll(
+                img,
+                info,
+                spacer,
+                botones
+        );
 
         return card;
     }
