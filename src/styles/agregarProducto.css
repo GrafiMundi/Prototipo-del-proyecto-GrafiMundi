@@ -1,0 +1,148 @@
+/* fondo general oscuro */
+.root {
+    -fx-background-color: #0f172a;
+    -fx-font-family: "Segoe UI";
+}
+
+/* contenedor tipo card */
+.form-container {
+    -fx-background-color: #020617;
+    -fx-background-radius: 20;
+    -fx-padding: 30;
+    -fx-spacing: 12;
+
+    -fx-effect: dropshadow(gaussian, rgba(0,255,0,0.15), 20, 0, 0, 0);
+}
+
+/* titulo */
+.titulo-form {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+/* labels */
+.label-form {
+    -fx-text-fill: #cbd5f5;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+/* label modo */
+#lblModo {
+    -fx-text-fill: #39ff14;
+    -fx-font-weight: bold;
+}
+
+/* inputs base */
+.text-field,
+.text-area,
+.combo-box {
+    -fx-background-color: transparent;
+    -fx-border-color: #39ff14;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-text-fill: white;
+    -fx-padding: 8;
+}
+
+/* text area */
+.text-area {
+    -fx-control-inner-background: transparent;
+}
+
+/* capas internas */
+.text-area .content,
+.text-area .viewport,
+.text-area .scroll-pane {
+    -fx-background-color: transparent;
+}
+
+/* texto textarea */
+.text-area .text {
+    -fx-fill: white;
+}
+
+/* placeholder general */
+.text-field .text {
+    -fx-fill: #94a3b8;
+}
+
+/* focus efecto neon */
+.text-field:focused,
+.text-area:focused,
+.combo-box:focused {
+    -fx-border-color: #39ff14;
+    -fx-effect: dropshadow(gaussian, #39ff14, 10, 0.5, 0, 0);
+}
+
+/* texto visible comboBox*/
+.combo-box .list-cell {
+    -fx-text-fill: white;
+}
+
+/* placeholder visible comboBox */
+.combo-box:empty .list-cell {
+    -fx-text-fill: #94a3b8;
+}
+
+/* flecha comboBox */
+.combo-box .arrow {
+    -fx-background-color: #39ff14;
+}
+
+/* dropdown fondo comboBox */
+.combo-box-popup .list-view {
+    -fx-background-color: #020617;
+    -fx-border-color: #39ff14;
+}
+
+/* items comboBox */
+.combo-box-popup .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+}
+
+/* hover items comboBox */
+.combo-box-popup .list-cell:hover {
+    -fx-background-color: rgba(57,255,20,0.2);
+}
+
+/* seleccionado comboBox */
+.combo-box-popup .list-cell:filled:selected {
+    -fx-background-color: #39ff14;
+    -fx-text-fill: black;
+}
+
+/* boton guardar */
+.boton-guardar {
+    -fx-background-color: #39ff14;
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-padding: 10 20 10 20;
+    -fx-cursor: hand;
+
+    -fx-effect: dropshadow(gaussian, #39ff14, 15, 0.5, 0, 0);
+}
+
+/* hover guardar */
+.boton-guardar:hover {
+    -fx-background-color: #2ee60f;
+}
+
+/* boton cancelar */
+.boton-cancelar {
+    -fx-background-color: transparent;
+    -fx-border-color: #39ff14;
+    -fx-text-fill: #39ff14;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 10 20 10 20;
+    -fx-cursor: hand;
+}
+
+/* hover cancelar */
+.boton-cancelar:hover {
+    -fx-background-color: rgba(57,255,20,0.1);
+}

@@ -22,6 +22,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.Priority;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import model.*;
@@ -40,7 +41,16 @@ public class CatalogoController implements Initializable {
 
     // lista que almacena las gráficas cargadas desde el archivo
     private ListaGraficas lista;
+    
+    // combobox para filtrar productos por precio (actualmente no funcional)
+    @FXML
+    private ComboBox<String> comboPrecio;
 
+    // combobox para filtrar productos por marca (actualmente no funcional)
+    @FXML
+    private ComboBox<String> comboMarca;
+
+    // contenedor con scroll que permite visualizar las tarjetas de productos
     @FXML
     private ScrollPane scrollPane;
 
@@ -55,6 +65,18 @@ public class CatalogoController implements Initializable {
         // carga las graficas desde el archivo
         lista = GraficaService.cargarLista();
 
+        // llenar filtros
+        comboPrecio.getItems().addAll(
+                "Menor a mayor",
+                "Mayor a menor"
+        );
+
+        comboMarca.getItems().addAll(
+                "AMD",
+                "INTEL",
+                "NVIDIA"
+        );
+        
         // verifica si la lista fue cargada correctamente
         if (lista == null || lista.inicio == null) {
 
@@ -115,14 +137,36 @@ public class CatalogoController implements Initializable {
             // cambia texto para admin
             opcionPrincipal.setText("Agregar Producto");
 
-            // accion admin
+            // accion que se ejecuta cuando el admin selecciona "agregar producto"
             opcionPrincipal.setOnAction(e -> {
 
-                System.out.println(
-                        "abrir panel agregar producto"
-                );
-            });
+                try {
 
+                    // carga el archivo fxml del formulario de agregar producto
+                    FXMLLoader loader = new FXMLLoader(
+                            getClass().getResource("/view/agregarProducto.fxml")
+                    );
+
+                    // carga la vista en memoria
+                    Parent root = loader.load();
+
+                    // obtiene el controlador asociado al fxml
+                    AgregarProductoController controller = loader.getController();
+
+                    // pasa la referencia del catalogo al otro controlador
+                    // esto permite acceder a la lista de productos y actualizarla
+                    controller.setCatalogoController(this);
+
+                    // crea una nueva ventana
+                    Stage stage = new Stage();
+                    stage.setScene(new Scene(root));
+                    stage.setTitle("Agregar Producto");
+                    stage.show();
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            });
         } else {
 
             // texto normal para clientes
@@ -192,6 +236,65 @@ public class CatalogoController implements Initializable {
 
             aux = aux.sig;
         }
+    }
+    
+    //  metodo que permite agregar un nuevo producto o aumentar el stock si ya existe
+    public void agregarOActualizarProducto(
+            String codigo,
+            String nombre,
+            String precio,
+            String descripcion,
+            String marca,
+            String cantidad,
+            String imagen
+    ) {
+
+        try {
+
+            // busca si ya existe un producto con el mismo codigo
+            nodoGraficas existente = lista.buscarPorCodigo(codigo);
+
+            if (existente != null) {
+
+                // si el producto ya existe, se incrementa la cantidad (stock)
+                existente.cantidad += Integer.parseInt(cantidad);
+
+                System.out.println("stock actualizado");
+
+            } else {
+
+                // si no existe, se crea un nuevo nodo con los datos ingresados
+                nodoGraficas nuevo = new nodoGraficas(
+                        codigo,
+                        nombre,
+                        precio,
+                        descripcion,
+                        marca,
+                        Integer.parseInt(cantidad),
+                        imagen
+                );
+                
+                // se agrega el nuevo producto a la lista enlazada
+                lista.agregar(nuevo);
+
+                System.out.println("producto agregado");
+            }
+
+            // guarda la lista actualizada en el archivo txt
+            GraficaService.guardarLista(lista);
+
+            // actualiza la interfaz para reflejar los cambios
+            mostrarGraficas();
+
+        } catch (Exception e) {
+
+            System.out.println("error al agregar o actualizar producto");
+            e.printStackTrace();
+        }
+    }
+    
+    public ListaGraficas getLista() {
+        return lista;
     }
 
     // crea la tarjeta visual de cada producto
@@ -277,17 +380,31 @@ public class CatalogoController implements Initializable {
 
         btn.setOnAction(e -> {
 
+            // verifica si hay stock disponible
             if (g.cantidad > 0) {
 
+                // reduce el stock en 1
                 g.cantidad--;
 
+                // guarda los cambios en el archivo
                 GraficaService.guardarLista(lista);
 
+                // refresca la interfaz
                 mostrarGraficas();
+
+                // alerta con nombre del producto
+                mostrarAlerta(
+                        "carrito",
+                        g.nombre + " agregado al carrito"
+                );
 
             } else {
 
-                System.out.println("sin stock");
+                // alerta si no hay stock
+                mostrarAlerta(
+                        "sin stock",
+                        "no hay unidades disponibles de " + g.nombre
+                );
             }
         });
 
@@ -306,6 +423,16 @@ public class CatalogoController implements Initializable {
         // boton favoritos
         Button favBtn = new Button("Favoritos");
         favBtn.getStyleClass().add("boton-favorito");
+
+        favBtn.setOnAction(e -> {
+
+            // aqui iria la logica de favoritos (si la implementas despues)
+            // alerta con nombre del producto
+            mostrarAlerta(
+                    "favoritos",
+                    g.nombre + " agregado a favoritos"
+            );
+        });
 
         // contenedor de botones
         HBox botones = new HBox(10);
@@ -357,5 +484,25 @@ public class CatalogoController implements Initializable {
 
             e.printStackTrace();
         }
+    }
+    
+    // metodo utilitario para mostrar alertas informativas al usuario, se reutiliza en acciones como agregar al carrito o favoritos
+    private void mostrarAlerta(
+            String titulo,
+            String mensaje
+    ) {
+
+        // crea una alerta de tipo informacion
+        javafx.scene.control.Alert alert
+                = new javafx.scene.control.Alert(
+                        javafx.scene.control.Alert.AlertType.INFORMATION
+                );
+        
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+
+        // mensaje principal que se mostrara al usuario
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 }

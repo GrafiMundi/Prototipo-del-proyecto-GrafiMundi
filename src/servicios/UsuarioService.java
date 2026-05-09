@@ -48,13 +48,14 @@ public class UsuarioService {
 
                 try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivo))) {
 
-                    bw.write("admin@gmail.com,admin,1234,admin");
+                    bw.write("admin@grafimundi.com,admin,1234,admin");
                     bw.newLine();
 
                     bw.write("cliente@gmail.com,cliente,1234,cliente");
                     bw.newLine();
                 }
             }
+            
             // leer archivo
             BufferedReader br = new BufferedReader(new FileReader(archivo));
 

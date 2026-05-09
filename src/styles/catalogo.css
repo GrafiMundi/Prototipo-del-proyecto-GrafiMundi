@@ -26,11 +26,12 @@
     -fx-cursor: hand;
 }
 
+/* efecto hover de botones superiores */
 .boton-topbar:hover {
     -fx-background-color: #354f52;
 }
 
-/* boton usuario */
+/* boton usuario (perfil) */
 .boton-usuario {
     -fx-background-color: #2f3e46;
     -fx-text-fill: white;
@@ -41,6 +42,7 @@
     -fx-cursor: hand;
 }
 
+/* hover del boton usuario */
 .boton-usuario:hover {
     -fx-background-color: #354f52;
 }
@@ -50,102 +52,75 @@
     -fx-max-width: 850;
 }
 
+/* texto descriptivo de bienvenida */
 .descripcion-bienvenida {
     -fx-fill: #555555;
     -fx-font-size: 13px;
     -fx-font-weight: bold;
 }
 
-/* card prodcuto */
+/* card producto */
 .card-producto {
     -fx-background-color: white;
     -fx-background-radius: 18;
     -fx-border-radius: 18;
     -fx-padding: 15 15 15 15;
     -fx-spacing: 12;
-
-    -fx-effect: dropshadow(
-        gaussian,
-        rgba(0,0,0,0.10),
-        12,
-        0,
-        0,
-        4
-        );
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.10), 8, 0, 0, 3);
 }
 
-/* hover */
+/* hover suavizado de la card producto */
 .card-producto:hover {
-    -fx-effect: dropshadow(
-        gaussian,
-        rgba(0,0,0,0.20),
-        25,
-        0,
-        0,
-        8
-        );
-    -fx-translate-y: -6;
+    -fx-background-color: #f5f5f5;
 }
 
-/* imagen */
+/* imagen dentro de la tarjeta */
 .card-producto ImageView {
     -fx-background-radius: 12;
 }
 
-/* nombre */
+/* texto general dentro de la tarjeta */
 .card-producto .label {
     -fx-font-size: 14px;
 }
 
-/* precio */
-.card-producto .label:nth-child(3) {
+/* precio del producto */
+.precio {
     -fx-font-size: 18px;
     -fx-font-weight: bold;
     -fx-text-fill: #2f3e46;
 }
 
-/* stock */
-.card-producto .label:nth-child(4) {
+/* texto de stock */
+.stock {
     -fx-text-fill: #777777;
     -fx-font-size: 12px;
 }
 
+/* descripcion del producto */
 .descripcion-producto {
-
     -fx-text-fill: #777777;
-
     -fx-font-size: 13px;
-
     -fx-line-spacing: 3;
-
     -fx-max-width: 280;
-
 }
 
-/*boton favorito*/
+/* boton de favorito */
 .boton-favorito {
-
     -fx-background-color: #dddddd;
-
     -fx-text-fill: #2f3e46;
-
     -fx-font-weight: bold;
-
     -fx-background-radius: 10;
-
     -fx-cursor: hand;
-
     -fx-pref-height: 35;
-
 }
 
+/* hover boton favorito */
 .boton-favorito:hover {
-
     -fx-background-color: #cccccc;
-
 }
 
-/* boton comprar */
+/* boton de compra */
 .boton-comprar {
     -fx-background-color: #52796f;
     -fx-text-fill: white;
@@ -155,6 +130,7 @@
     -fx-pref-height: 35;
 }
 
+/* hover boton comprar */
 .boton-comprar:hover {
     -fx-background-color: #3d5a52;
 }
@@ -165,72 +141,69 @@
     -fx-padding: 10 10 10 10;
 }
 
-/* menu usuario */
+/* menú usuario */
 .context-menu {
     -fx-background-color: white;
     -fx-background-radius: 15;
     -fx-border-radius: 15;
     -fx-border-color: #dddddd;
     -fx-padding: 15 15 15 15;
-
-    -fx-effect: dropshadow(
-        gaussian,
-        rgba(0,0,0,0.15),
-        15,
-        0,
-        0,
-        4
-        );
 }
 
+/* separador invisible para las opciones del menu de usuario */
 .separator {
-    -fx-padding: 0 0 0 0;
+    -fx-padding: 0;
     -fx-opacity: 0;
 }
 
-/* saludo */
+/* item de saludo en menu */
 .menu-item.saludo-menu {
     -fx-background-color: white;
     -fx-background-radius: 12;
-    -fx-padding: 16 16 16 16;
+    -fx-padding: 16;
 }
 
+/* texto del saludo */
 .menu-item.saludo-menu .label {
     -fx-text-fill: black;
     -fx-font-size: 15px;
     -fx-font-weight: 900;
 }
 
-/* item normal */
+/* items del menu */
 .menu-item.item-menu {
     -fx-background-color: transparent;
     -fx-background-radius: 12;
     -fx-padding: 18 12 18 12;
 }
 
+/* texto de items del menu */
 .menu-item.item-menu .label {
     -fx-text-fill: black;
     -fx-font-size: 17px;
     -fx-font-weight: bold;
 }
 
+/* efecto focus en items */
 .menu-item.item-menu:focused {
     -fx-background-color: #f2f2f2;
 }
 
-/* cerrar sesion */
+/* item de cerrar sesion */
 .menu-item.item-cerrar {
     -fx-background-color: #ff1a1a;
     -fx-background-radius: 12;
     -fx-padding: 18 12 18 12;
 }
 
+/* texto de cerrar sesion */
 .menu-item.item-cerrar .label {
     -fx-text-fill: white;
     -fx-font-size: 17px;
     -fx-font-weight: bold;
 }
 
+/* hover/focus cerrar sesion */
 .menu-item.item-cerrar:focused {
     -fx-background-color: #e60000;
 }

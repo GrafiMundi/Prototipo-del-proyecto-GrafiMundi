@@ -27,4 +27,21 @@ public class ListaGraficas {
             fin = nuevo;
         }
     }
+    
+    // buscar un producto por codigo
+    public nodoGraficas buscarPorCodigo(String codigo) {
+
+        nodoGraficas aux = inicio;
+
+        while (aux != null) {
+
+            if (aux.codigo.equalsIgnoreCase(codigo)) {
+                return aux;
+            }
+
+            aux = aux.sig;
+        }
+
+        return null;
+    }
 }

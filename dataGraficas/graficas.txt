@@ -1,10 +1,10 @@
-001;MSI GeForce RTX 4090 SUPRIM 24GB GDDR6X;1.3295936E7;Tarjeta grafica de ultra alto rendimiento ideal para gaming extremo;NVIDIA;4;001.png
+001;MSI GeForce RTX 4090 SUPRIM 24GB GDDR6X;1.3295936E7;Tarjeta grafica de ultra alto rendimiento ideal para gaming extremo;NVIDIA;7;001.png
 002;AMD Radeon RX 7900 XTX Phantom Gaming 24GB OC;1.15E7;Alto rendimiento con arquitectura avanzada para juegos;AMD;5;002.png
 003;Intel Arc A770 Limited Edition 16GB PCI Express 4.0;7000000.0;Grafica moderna de Intel ideal para gaming y creacion;INTEL;5;003.png
 004;AORUS Radeon RX 6900 XT Waterforce 16GB;1.3359E7;Sistema de refrigeracion liquida para maximo rendimiento;AMD;5;004.png
 005;Gigabyte GeForce 700 Series GT 710 2GB;339000.0;Grafica economica ideal para tareas basicas;NVIDIA;5;005.png
 006;Gigabyte GeForce RTX 5070;2320409.0;Alto rendimiento con nuevas tecnologias graficas;NVIDIA;5;006.png
-007;NVIDIA GeForce RTX 5050 Dual Fan 8GB;1130998.0;Ideal para gaming moderno con buen rendimiento;NVIDIA;5;007.png
+007;NVIDIA GeForce RTX 5050 Dual Fan 8GB;1130998.0;Ideal para gaming moderno con buen rendimiento;NVIDIA;4;007.png
 008;ASRock Intel Arc A580 Challenger 8GB GDDR6;1864621.0;Excelente equilibrio entre precio y rendimiento;INTEL;5;008.png
 009;MSI GT 1030 4GB DDR4 OC;610258.0;Grafica de entrada para uso basico y multimedia;NVIDIA;5;009.png
 010;XFX Speedster Quick 319 RX 7700 XT 12GB;2660000.0;Potente grafica para gaming exigente;AMD;5;010.png

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="15"
+      alignment="CENTER"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controller.AgregarProductoController"
+      stylesheets="@/styles/agregarProducto.css"
+      styleClass="form-container">
+
+    <!-- titulo del formulario -->
+    <Label text="Agregar Producto"
+           styleClass="titulo-form"/>
+
+    <!-- modo actual -->
+    <Label fx:id="lblModo"
+           text="Modo: Nuevo producto"
+           styleClass="label-form"/>
+
+    <!-- codigo -->
+    <Label text="Código" styleClass="label-form"/>
+    <TextField fx:id="txtCodigo" promptText="Ingrese el código"/>
+
+    <!-- nombre -->
+    <Label text="Nombre" styleClass="label-form"/>
+    <TextField fx:id="txtNombre" promptText="Ingrese el nombre"/>
+
+    <!-- precio -->
+    <Label text="Precio" styleClass="label-form"/>
+    <TextField fx:id="txtPrecio" promptText="Ingrese el precio"/>
+
+    <!-- descripcion -->
+    <Label text="Descripción del producto" styleClass="label-form"/>
+    <TextArea fx:id="txtDescripcion"
+              promptText="Ingrese la descripción"
+              prefHeight="70"/>
+
+    <!-- marca -->
+    <Label text="Marca" styleClass="label-form"/>
+    <ComboBox fx:id="comboMarca" promptText="Seleccione una marca"/>
+
+    <!-- cantidad -->
+    <Label text="Cantidad" styleClass="label-form"/>
+    <TextField fx:id="txtCantidad" promptText="Ingrese la cantidad"/>
+
+    <!-- imagen -->
+    <Label text="Imagen" styleClass="label-form"/>
+    <TextField fx:id="txtImagen"
+               promptText="ej: gpu1.png"/>
+
+    <!-- botones -->
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Guardar"
+                onAction="#guardarProducto"
+                styleClass="boton-guardar"/>
+
+        <Button text="Cancelar" onAction="#cerrarVentana" styleClass="boton-cancelar"/>
+    </HBox>
+
+</VBox>
