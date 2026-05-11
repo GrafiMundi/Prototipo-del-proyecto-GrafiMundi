@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
@@ -13,80 +14,60 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<BorderPane prefHeight="600"
-            stylesheets="@../styles/catalogo.css"
-            xmlns="http://javafx.com/javafx/25"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controller.CatalogoController">
+<StackPane fx:id="rootContainer" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CatalogoController">
+    <BorderPane fx:id="vistaCatalogoRoot" prefHeight="600" stylesheets="@../styles/catalogo.css">
 
-    <!-- barra superior -->
-    <top>
-        <HBox alignment="CENTER_LEFT" spacing="15" styleClass="topbar">
-            
-            <Label styleClass="titulo-topbar" text="GrafiMundi">
-                <font>
-                    <Font size="18" />
-                </font>
-            </Label>
-
-            <Region HBox.hgrow="ALWAYS" />
-
-            <Button styleClass="boton-topbar" text="Carrito" />
-            <Button styleClass="boton-topbar" text="Favoritos" />
-            <Button fx:id="btnUsuario" styleClass="boton-usuario" text="Usuario" />
-        </HBox>
-    </top>
-
-    <!-- contenido -->
-    <center>
-        <VBox spacing="20" style="-fx-padding: 20;">
-
-            <!-- bienvenida -->
-            <VBox spacing="10" maxWidth="900">
-                <Label text="Bienvenido a GrafiMundi" styleClass="titulo"/>
-
-                <!-- descripción -->
-                <TextFlow styleClass="contenedor-bienvenida">
-                    <Text styleClass="descripcion-bienvenida"
-                          text="La tienda líder en tarjetas gráficas en Colombia. Potencia tu PC con GPUs NVIDIA, AMD e Intel listas para instalar, jugar y rendir al máximo desde el primer momento. " />
-                    <Text styleClass="descripcion-bienvenida"
-                          text="Disfruta del mejor rendimiento, precios competitivos y marcas reconocidas como MSI, ASUS, Gigabyte, XFX, Aorus y ASRock." />
-                </TextFlow>
-
-            </VBox>
-
-            <!-- filtros -->
-            <HBox alignment="CENTER_RIGHT" spacing="10">
-                <Label text="Filtrar por:" />
-
-                <ComboBox fx:id="comboPrecio" promptText="Precio" prefWidth="130"/>
-                <ComboBox fx:id="comboMarca" promptText="Marca" prefWidth="130"/>
-
+        <!-- barra superior -->
+        <top>
+            <HBox alignment="CENTER_LEFT" spacing="15" styleClass="topbar">
+                <Label styleClass="titulo" text="GrafiMundi">
+                    <font>
+                        <Font size="18" />
+                    </font>
+                </Label>
+                <Region HBox.hgrow="ALWAYS" />
+                <Button styleClass="boton-topbar" text="Carrito" />
+                <Button styleClass="boton-topbar" text="Favoritos" />
+                <Button fx:id="btnUsuario" styleClass="boton-usuario" text="Usuario" />
             </HBox>
+        </top>
 
-             <!-- scrollpane -->
-            <ScrollPane fx:id="scrollPane"
-                        fitToWidth="true"
-                        style="-fx-background-color: transparent;">
+        <!-- contenido -->
+        <center>
+            <VBox spacing="20" style="-fx-padding: 20;">
 
-                <content>
-                    <FlowPane fx:id="contenedorGraficas"
-                              hgap="80"
-                              vgap="60"
-                              alignment="TOP_CENTER"
-                              style="-fx-padding: 40 100 40 100;" />
-                </content>
+                <!-- bienvenida -->
+                <VBox spacing="10" maxWidth="900">
+                    <Label text="Bienvenido a GrafiMundi" styleClass="titulo"/>
+                    <TextFlow styleClass="contenedor-bienvenida">
+                        <Text styleClass="descripcion-bienvenida"
+                              text="La tienda líder en tarjetas gráficas en Colombia. Potencia tu PC con GPUs NVIDIA, AMD e Intel listas para instalar, jugar y rendir al máximo desde el primer momento. " />
+                        <Text styleClass="descripcion-bienvenida"
+                              text="Disfruta del mejor rendimiento, precios competitivos y marcas reconocidas como MSI, ASUS, Gigabyte, XFX, Aorus y ASRock." />
+                    </TextFlow>
+                </VBox>
 
-            </ScrollPane>
+                <!-- filtros -->
+                <HBox alignment="CENTER_RIGHT" spacing="10">
+                    <Label text="Filtrar por:" />
+                    <ComboBox fx:id="comboPrecio" promptText="Precio" prefWidth="130"/>
+                    <ComboBox fx:id="comboMarca" promptText="Marca" prefWidth="130"/>
+                </HBox>
 
-        </VBox>
-    </center>
-
-    <!-- footer -->
-    <bottom>
-        <HBox alignment="CENTER_LEFT" styleClass="footer">
-            <Label text="© 2026 GrafiMundi Colombia" />
-        </HBox>
-    </bottom>
-
-</BorderPane>
+                <!-- scrollpane -->
+                <ScrollPane fx:id="scrollPane" fitToWidth="true" style="-fx-background-color: transparent;">
+                    <content>
+                        <FlowPane fx:id="contenedorGraficas" hgap="80" vgap="60" alignment="TOP_CENTER" style="-fx-padding: 40 100 40 100;" />
+                    </content>
+                </ScrollPane>
+            </VBox>
+        </center>
+        
+        <!-- footer -->
+        <bottom>
+            <HBox alignment="CENTER_LEFT" styleClass="footer">
+                <Label text="© 2026 GrafiMundi Colombia" />
+            </HBox>
+        </bottom>
+    </BorderPane>
+</StackPane>    

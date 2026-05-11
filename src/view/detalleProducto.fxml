@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Region?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" xmlns="http://javafx.com/javafx/25" fx:controller="controller.DetalleProductoController" stylesheets="@../styles/catalogo.css" styleClass="root">
+
+    <!-- topbar -->
+    <top>
+        <HBox alignment="CENTER_LEFT" styleClass="topbar" spacing="20">
+            <Label text="GrafiMundi" styleClass="titulo"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="btnVolver" text="Volver" onAction="#volverAlCatalogo" styleClass="boton-topbar"/>
+        </HBox>
+    </top>
+
+    <!-- contenido del margen superior-->
+    <center>
+        <VBox spacing="25" style="-fx-padding: 20;">
+            
+            <!-- mensaje superior -->
+            <VBox maxWidth="1200">
+                <Label text="¿Por qué elegir GrafiMundi para tu próximo upgrade?"
+                       style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+                <Label wrapText="true"
+                       style="-fx-font-size: 14px; -fx-text-fill: #555;"
+                       text="En GrafiMundi no solo vendemos hardware; somos expertos apasionados por el rendimiento. Al adquirir tu GPU con nosotros, aseguras un producto respaldado por las mejores marcas a nivel global y un soporte técnico especializado en el mercado colombiano. Nos comprometemos a entregarte la potencia que tu setup necesita con la garantía y seguridad que solo un líder en componentes puede ofrecer."/>
+            </VBox>
+
+            <!-- contenido (informacion de la grafica) -->
+            <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
+
+                <HBox alignment="CENTER" spacing="60" maxWidth="1300">
+
+                    <!-- imagen -->
+                    <ImageView fx:id="imgProducto" fitWidth="520" preserveRatio="true" style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 25,0,0,8);"/>
+
+                    <!-- info -->
+                    <VBox spacing="18" prefWidth="500">
+                        <Label fx:id="lblNombre" wrapText="true" style="-fx-font-size: 30px; -fx-font-weight: bold;"/>
+                        <Label fx:id="lblPrecio" style="-fx-font-size: 28px; -fx-text-fill: #2e7d32; -fx-font-weight: bold;"/>
+                        <Label fx:id="lblMarca" style="-fx-font-size: 17px;"/>
+                        <Label fx:id="lblCantidad" style="-fx-font-size: 17px; -fx-text-fill: #2e7d32;"/>
+                        <Region prefHeight="10"/>
+                        <Label text="Descripción" style="-fx-font-size: 19px; -fx-font-weight: bold;"/>
+                        <Label fx:id="lblDescripcion" wrapText="true" style="-fx-font-size: 15px;"/>
+                    </VBox>
+
+                    <!-- panel derecho -->
+                    <VBox spacing="30" prefWidth="500" alignment="TOP_CENTER"
+                          style="-fx-padding: 30; -fx-background-color: white; -fx-border-color: #e0e0e0; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 15,0,0,5);">
+
+                        <!-- precio -->
+                        <Label fx:id="lblPrecioPanel"
+                               style="-fx-font-size: 30px; -fx-text-fill: #2e7d32; -fx-font-weight: bold;"/>
+                        <Label text="Envío disponible"
+                               style="-fx-font-size: 15px; -fx-text-fill: #555;"/>
+                        <Region prefHeight="10"/>
+
+                        <!-- botones -->
+                        <Button fx:id="btnCarrito" text="Agregar al carrito" maxWidth="260" styleClass="boton-comprar" style="-fx-font-size: 16px; -fx-padding: 16 12;"/>
+                        <Button fx:id="btnFav" text="Agregar a favoritos" maxWidth="260" styleClass="boton-favorito" style="-fx-font-size: 15px; -fx-padding: 14 12;"/>
+                        <Region prefHeight="15"/>
+
+                        <!-- informacion adicional -->
+                        <VBox spacing="8" maxWidth="260">
+                            <Label text="Enviado por: Servientrega"
+                                   style="-fx-font-size: 13px; -fx-text-fill: #444;"/>
+                            <Label text="Vendido por: GrafiMundi"
+                                   style="-fx-font-size: 13px; -fx-text-fill: #444;"/>
+                            <Label text="Medio de pago: PSE"
+                                   style="-fx-font-size: 13px; -fx-text-fill: #444;"/>
+                            <Label wrapText="true"
+                                   text="Empaque: Personalizado de GrafiMundi además del empaque original"
+                                   style="-fx-font-size: 13px; -fx-text-fill: #444;"/>
+                        </VBox>
+                    </VBox>
+                </HBox>
+            </VBox>
+        </VBox>
+    </center>
+
+    <!-- footer -->
+    <bottom>
+        <HBox alignment="CENTER_LEFT" style="-fx-padding: 15 25;">
+            <Label text="© 2026 GrafiMundi Colombia"
+                   style="-fx-text-fill: #777; -fx-font-size: 13px;"/>
+        </HBox>
+    </bottom>
+</BorderPane>

@@ -25,11 +25,20 @@ import javafx.geometry.Pos;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import model.*;
 import servicios.GraficaService;
 import servicios.UsuarioService;
 
 public class CatalogoController implements Initializable {
+    
+    @FXML
+    private StackPane rootContainer;
+    
+    @FXML
+    private Parent vistaCatalogoRoot;
+
+    private Parent vistaCatalogo;
 
     // contenedor donde se agregan las tarjetas de productos
     @FXML
@@ -97,6 +106,10 @@ public class CatalogoController implements Initializable {
             crearMenuUsuario(nombreUsuario);
         }
 
+        vistaCatalogo = vistaCatalogoRoot;
+        
+        System.out.println(rootContainer);
+        
         // mostrar productos
         mostrarGraficas();
     }
@@ -236,6 +249,31 @@ public class CatalogoController implements Initializable {
 
             aux = aux.sig;
         }
+    }
+    
+    private void abrirDetalleProducto(nodoGraficas grafica) {
+
+        try {
+
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/view/detalleProducto.fxml")
+            );
+
+            Parent vistaDetalle = loader.load();
+
+            DetalleProductoController controller = loader.getController();
+            controller.setProducto(grafica);
+            controller.setCatalogoController(this);
+
+            rootContainer.getChildren().setAll(vistaDetalle);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void mostrarCatalogo() {
+        rootContainer.getChildren().setAll(vistaCatalogo);
     }
     
     //  metodo que permite agregar un nuevo producto o aumentar el stock si ya existe
@@ -446,6 +484,13 @@ public class CatalogoController implements Initializable {
                 spacer,
                 botones
         );
+        
+        card.setOnMouseClicked(e -> {
+
+            if (e.getTarget() instanceof Button) return;
+
+            abrirDetalleProducto(g);
+        });
 
         return card;
     }
