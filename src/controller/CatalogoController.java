@@ -107,9 +107,7 @@ public class CatalogoController implements Initializable {
         }
 
         vistaCatalogo = vistaCatalogoRoot;
-        
-        System.out.println(rootContainer);
-        
+                
         // mostrar productos
         mostrarGraficas();
     }
@@ -464,7 +462,8 @@ public class CatalogoController implements Initializable {
 
         favBtn.setOnAction(e -> {
 
-            // aqui iria la logica de favoritos (si la implementas despues)
+            // aqui ira la logica de favoritos
+            
             // alerta con nombre del producto
             mostrarAlerta(
                     "favoritos",

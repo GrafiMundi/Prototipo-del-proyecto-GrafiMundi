@@ -1,6 +1,7 @@
 package model;
 
 public class nodoGraficas {
+
     public String codigo;
     public String nombre;
     public double precio;
@@ -24,5 +25,42 @@ public class nodoGraficas {
         imagen = img;
         sig = null;
         ant = null;
+    }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public double getPrecio() {
+        return precio;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public String getMarca() {
+        return marca;
+    }
+
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    public double subtotal() {
+
+        return precio * cantidad;
     }
 }

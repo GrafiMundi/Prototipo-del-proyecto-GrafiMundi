@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/25" fx:controller="controller.CarritoController">
+   <children>
+      <Label layoutX="92.0" layoutY="125.0" text="Aquí va la vista del Carrito: Asemejeandose lo más posible a la vista del prototipo" />
+   </children>
+</AnchorPane>
