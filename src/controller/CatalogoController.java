@@ -1,6 +1,7 @@
 package controller;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,6 +24,7 @@ import javafx.scene.layout.Priority;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -58,6 +60,9 @@ public class CatalogoController implements Initializable {
     // combobox para filtrar productos por marca (actualmente no funcional)
     @FXML
     private ComboBox<String> comboMarca;
+    
+    @FXML
+    private Button btnLimpiarFiltros;
 
     // contenedor con scroll que permite visualizar las tarjetas de productos
     @FXML
@@ -76,15 +81,21 @@ public class CatalogoController implements Initializable {
 
         // llenar filtros
         comboPrecio.getItems().addAll(
+                "Sin orden",
                 "Menor a mayor",
                 "Mayor a menor"
         );
 
         comboMarca.getItems().addAll(
+                "Todas",
                 "AMD",
                 "INTEL",
                 "NVIDIA"
         );
+        
+        comboPrecio.setOnAction(e -> mostrarGraficasFiltradas());
+        comboMarca.setOnAction(e -> mostrarGraficasFiltradas());
+        btnLimpiarFiltros.setOnAction(e -> limpiarFiltros());
         
         // verifica si la lista fue cargada correctamente
         if (lista == null || lista.inicio == null) {
@@ -270,6 +281,93 @@ public class CatalogoController implements Initializable {
         }
     }
     
+    private void mostrarGraficasFiltradas() {
+
+        contenedorGraficas.getChildren().clear();
+
+        if (lista == null || lista.inicio == null) {
+            return;
+        }
+
+        String ordenPrecio = comboPrecio.getValue();
+        String marcaSeleccionada = comboMarca.getValue();
+
+        final String marcaFiltro
+                = ("Todas".equals(marcaSeleccionada)) ? null : marcaSeleccionada;
+
+        ArrayList<nodoGraficas> productos = convertirALista();
+
+        // filtro por marca
+        if (marcaFiltro != null && !marcaFiltro.isEmpty()) {
+
+            productos.removeIf(g
+                    -> !g.marca.equalsIgnoreCase(marcaFiltro)
+            );
+        }
+
+        // filtro de orden por precio
+        if ("Menor a mayor".equals(ordenPrecio)) {
+
+            productos.sort((a, b)
+                    -> Double.compare(a.precio, b.precio)
+            );
+
+        } else if ("Mayor a menor".equals(ordenPrecio)) {
+
+            productos.sort((a, b)
+                    -> Double.compare(b.precio, a.precio)
+            );
+        }
+
+        // mostrar
+        for (nodoGraficas g : productos) {
+            contenedorGraficas.getChildren().add(crearCard(g));
+        }
+    }
+
+    private void limpiarFiltros() {
+
+    comboPrecio.getSelectionModel().clearSelection();
+    comboMarca.getSelectionModel().clearSelection();
+
+    comboPrecio.setValue(null);
+    comboMarca.setValue(null);
+
+    // metodo que pone el promtext original del comboBox
+    comboPrecio.setButtonCell(new ListCell<>() {
+        @Override
+        protected void updateItem(String item, boolean empty) {
+            super.updateItem(item, empty);
+            setText(empty || item == null ? "Precio" : item);
+        }
+    });
+
+    // metodo que pone el promtext original del comboBox
+    comboMarca.setButtonCell(new ListCell<>() {
+        @Override
+        protected void updateItem(String item, boolean empty) {
+            super.updateItem(item, empty);
+            setText(empty || item == null ? "Marca" : item);
+        }
+    });
+
+    mostrarGraficas();
+}
+
+    private ArrayList<nodoGraficas> convertirALista() {
+
+        ArrayList<nodoGraficas> array = new ArrayList<>();
+
+        nodoGraficas aux = lista.inicio;
+
+        while (aux != null) {
+            array.add(aux);
+            aux = aux.sig;
+        }
+
+        return array;
+    }
+
     public void mostrarCatalogo() {
         rootContainer.getChildren().setAll(vistaCatalogo);
     }
@@ -320,7 +418,7 @@ public class CatalogoController implements Initializable {
             GraficaService.guardarLista(lista);
 
             // actualiza la interfaz para reflejar los cambios
-            mostrarGraficas();
+            limpiarFiltros();
 
         } catch (Exception e) {
 
@@ -376,7 +474,6 @@ public class CatalogoController implements Initializable {
         nombre.setWrapText(true);
         nombre.setMinHeight(40);
         nombre.setMaxHeight(40);
-        nombre.getStyleClass().add("nombre-producto");
 
         VBox.setMargin(nombre, new Insets(43, 0, 0, 0));
 
@@ -384,7 +481,7 @@ public class CatalogoController implements Initializable {
         Label precio = new Label(
                 "$ " + String.format("%,.0f", g.precio)
         );
-        precio.getStyleClass().add("precio-producto");
+        precio.getStyleClass().add("precio");
 
         VBox.setMargin(precio, new Insets(32, 0, 0, 0));
 
@@ -392,7 +489,7 @@ public class CatalogoController implements Initializable {
         Label stock = new Label(
                 "Stock: " + g.cantidad
         );
-        stock.getStyleClass().add("stock-producto");
+        stock.getStyleClass().add("stock");
 
         // descripcion
         String desc = (g.descripcion != null) ? g.descripcion : "";

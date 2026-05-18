@@ -130,6 +130,85 @@
     -fx-pref-height: 35;
 }
 
+.combo-box {
+    -fx-background-color: #e9ecef; /* gris claro suave */
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #ced4da;
+    -fx-padding: 5 10 5 10;
+    -fx-font-size: 13px;
+}
+
+/* texto */
+.combo-box .list-cell {
+    -fx-text-fill: #495057;
+    -fx-background-color: transparent;
+}
+
+/* flecha */
+.combo-box .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.combo-box .arrow {
+    -fx-background-color: #495057;
+}
+
+/* hover */
+.combo-box:hover {
+    -fx-background-color: #dee2e6;
+    -fx-border-color: #52796f;
+}
+
+/* cuando está abierto */
+.combo-box:showing {
+    -fx-background-color: #dee2e6;
+}
+
+/* dropdown */
+.combo-box-popup .list-view {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-color: #ced4da;
+}
+
+/* items */
+.combo-box-popup .list-cell {
+    -fx-text-fill: #495057;
+}
+
+/* hover item */
+.combo-box-popup .list-cell:hover {
+    -fx-background-color: #f1f3f5;
+}
+
+/* seleccionado */
+.combo-box-popup .list-cell:selected {
+    -fx-background-color: #ced4da;
+}
+
+/* Botón Limpiar */
+.btn-limpiar {
+    -fx-background-color: transparent;
+    -fx-border-color: #52796f;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-text-fill: #52796f;
+    -fx-font-weight: bold;
+    -fx-padding: 6 14 6 14;
+}
+
+/* Hover */
+.btn-limpiar:hover {
+    -fx-background-color: #52796f;
+    -fx-text-fill: white;
+}
+
+/* Click */
+.btn-limpiar:pressed {
+    -fx-background-color: #3a5a40;
+}
+
 /* hover boton comprar */
 .boton-comprar:hover {
     -fx-background-color: #3d5a52;

@@ -50,8 +50,9 @@
                 <!-- filtros -->
                 <HBox alignment="CENTER_RIGHT" spacing="10">
                     <Label text="Filtrar por:" />
-                    <ComboBox fx:id="comboPrecio" promptText="Precio" prefWidth="130"/>
-                    <ComboBox fx:id="comboMarca" promptText="Marca" prefWidth="130"/>
+                    <ComboBox fx:id="comboPrecio" promptText="Precio" prefWidth="130" styleClass="combo-box"/>
+                    <ComboBox fx:id="comboMarca" promptText="Marca" prefWidth="130" styleClass="combo-box"/>
+                    <Button fx:id="btnLimpiarFiltros" text="Limpiar" styleClass="btn-limpiar"/>
                 </HBox>
 
                 <!-- scrollpane -->
