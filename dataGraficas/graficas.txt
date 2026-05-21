@@ -12,5 +12,5 @@
 012;Intel Arc A580 8GB GDDR6 OC 12GB;2300000.0;Grafica de gama media con buen rendimiento;INTEL;5;012.png
 013;Xplai GT730 4GB DDR3 128bit;162000.0;Grafica economica para tareas simples;NVIDIA;5;013.png
 014;RX 580 8GB DDR5 256bit;521700.0;Grafica potente de generacion anterior;AMD;5;014.png
-015;RX 550 Low Profile 4GB GDDR5;643740.0;Ideal para equipos compactos y bajo consumo;AMD;5;015.png
+015;RX 550 Low Profile 4GB GDDR5;643740.0;Ideal para equipos compactos y bajo consumo;AMD;4;015.png
 016;MSI Gaming GeForce RTX 2070 Super 8GB GDDR6;1201543.0;Excelente rendimiento en juegos actuales;NVIDIA;5;016.png

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane minHeight="356.0" prefHeight="356.0" prefWidth="997.0" style="-fx-background-color: #b4b4b4; -fx-background-radius: 20;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FavController">
+   <children>
+      <ImageView fx:id="imgF" fitHeight="306.0" fitWidth="374.0" layoutX="31.0" layoutY="25.0" pickOnBounds="true">
+         <image>
+            <Image url="@../ImagenesGrafiMundi/005.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="nombre" alignment="TOP_LEFT" layoutX="440.0" layoutY="33.0" maxHeight="71.0" maxWidth="523.0" prefHeight="71.0" prefWidth="523.0" text="oooooooooooooooooMSI GeForce RTX 4090 SUPRIM 24GB - GDDR6X" wrapText="true">
+         <font>
+            <Font name="System Bold" size="23.0" />
+         </font>
+      </Label>
+      <Label fx:id="precio" layoutX="449.0" layoutY="156.0" prefHeight="45.0" prefWidth="199.0" text="\$ 15.000.000">
+         <font>
+            <Font name="System Bold" size="30.0" />
+         </font>
+      </Label>
+      <Label fx:id="cantidad" layoutX="668.0" layoutY="158.0" prefHeight="41.0" prefWidth="175.0" text="Disponibles: 16">
+         <font>
+            <Font size="23.0" />
+         </font></Label>
+      <Button layoutX="618.0" layoutY="260.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="192.0" style="-fx-background-color: #52796f;" text="Agregar al carrito" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="19.0" />
+         </font>
+      </Button>
+      <Button fx:id="Qtar" layoutX="860.0" layoutY="148.0" mnemonicParsing="false" onAction="#quitarFavorito" prefHeight="51.0" prefWidth="103.0" style="-fx-background-color: white;" text="Quitar">
+         <font>
+            <Font name="System Bold" size="22.0" />
+         </font></Button>
+   </children>
+   <effect>
+      <DropShadow />
+   </effect>
+</Pane>

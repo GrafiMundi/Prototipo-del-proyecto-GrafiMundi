@@ -33,14 +33,16 @@ import servicios.GraficaService;
 import servicios.UsuarioService;
 
 public class CatalogoController implements Initializable {
-    
+
     @FXML
     private StackPane rootContainer;
-    
+
     @FXML
     private Parent vistaCatalogoRoot;
 
     private Parent vistaCatalogo;
+
+    private boolean invertido = false;
 
     // contenedor donde se agregan las tarjetas de productos
     @FXML
@@ -52,7 +54,7 @@ public class CatalogoController implements Initializable {
 
     // lista que almacena las gráficas cargadas desde el archivo
     private ListaGraficas lista;
-    
+
     // combobox para filtrar productos por precio (actualmente no funcional)
     @FXML
     private ComboBox<String> comboPrecio;
@@ -60,13 +62,16 @@ public class CatalogoController implements Initializable {
     // combobox para filtrar productos por marca (actualmente no funcional)
     @FXML
     private ComboBox<String> comboMarca;
-    
+
     @FXML
     private Button btnLimpiarFiltros;
 
     // contenedor con scroll que permite visualizar las tarjetas de productos
     @FXML
     private ScrollPane scrollPane;
+
+    @FXML
+    private Button btnInvertir;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -92,11 +97,11 @@ public class CatalogoController implements Initializable {
                 "INTEL",
                 "NVIDIA"
         );
-        
+
         comboPrecio.setOnAction(e -> mostrarGraficasFiltradas());
         comboMarca.setOnAction(e -> mostrarGraficasFiltradas());
         btnLimpiarFiltros.setOnAction(e -> limpiarFiltros());
-        
+
         // verifica si la lista fue cargada correctamente
         if (lista == null || lista.inicio == null) {
 
@@ -109,6 +114,12 @@ public class CatalogoController implements Initializable {
             // obtiene el nombre del usuario
             String nombreUsuario
                     = UsuarioService.getUsuarioActual().getUsername();
+            String rol = UsuarioService.getUsuarioActual().getRol();
+
+            if (rol.equalsIgnoreCase("admin")) {
+                btnInvertir.setVisible(true);
+                btnInvertir.setManaged(true);
+            }
 
             // cambia el texto del boton
             btnUsuario.setText(nombreUsuario);
@@ -118,7 +129,7 @@ public class CatalogoController implements Initializable {
         }
 
         vistaCatalogo = vistaCatalogoRoot;
-                
+
         // mostrar productos
         mostrarGraficas();
     }
@@ -259,7 +270,7 @@ public class CatalogoController implements Initializable {
             aux = aux.sig;
         }
     }
-    
+
     private void abrirDetalleProducto(nodoGraficas grafica) {
 
         try {
@@ -280,7 +291,7 @@ public class CatalogoController implements Initializable {
             e.printStackTrace();
         }
     }
-    
+
     private void mostrarGraficasFiltradas() {
 
         contenedorGraficas.getChildren().clear();
@@ -289,7 +300,9 @@ public class CatalogoController implements Initializable {
             return;
         }
 
-        String ordenPrecio = comboPrecio.getValue();
+        String ordenPrecio = comboPrecio.getValue() != null 
+        ? comboPrecio.getValue() 
+        : "Sin orden";
         String marcaSeleccionada = comboMarca.getValue();
 
         final String marcaFiltro
@@ -325,53 +338,116 @@ public class CatalogoController implements Initializable {
         }
     }
 
+    private void mostrarGraficasInverso() {
+
+        contenedorGraficas.getChildren().clear();
+
+        if (lista == null || lista.fin == null) {
+            return;
+        }
+
+        nodoGraficas actual = lista.fin;
+        String marcaSeleccionada = comboMarca.getValue();
+        String marcaFiltro = ("Todas".equals(marcaSeleccionada)) ? null : marcaSeleccionada;
+
+        while (actual != null) {
+
+            // aplicar filtros
+            if (marcaFiltro == null || actual.marca.equalsIgnoreCase(marcaFiltro)) {
+                contenedorGraficas.getChildren().add(crearCard(actual));
+            }
+
+            // avanzar hacia atras
+            actual = actual.ant;
+        }
+    }
+
     private void limpiarFiltros() {
 
-    comboPrecio.getSelectionModel().clearSelection();
-    comboMarca.getSelectionModel().clearSelection();
+        comboPrecio.getSelectionModel().clearSelection();
+        comboMarca.getSelectionModel().clearSelection();
 
-    comboPrecio.setValue(null);
-    comboMarca.setValue(null);
+        comboPrecio.setValue(null);
+        comboMarca.setValue(null);
 
-    // metodo que pone el promtext original del comboBox
-    comboPrecio.setButtonCell(new ListCell<>() {
-        @Override
-        protected void updateItem(String item, boolean empty) {
-            super.updateItem(item, empty);
-            setText(empty || item == null ? "Precio" : item);
+        // metodo que pone el promtext original del comboBox
+        comboPrecio.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? "Precio" : item);
+            }
+        });
+
+        // metodo que pone el promtext original del comboBox
+        comboMarca.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? "Marca" : item);
+            }
+        });
+
+        if (invertido) {
+            mostrarGraficasInverso();
+        } else {
+            mostrarGraficas();
         }
-    });
+    }
 
-    // metodo que pone el promtext original del comboBox
-    comboMarca.setButtonCell(new ListCell<>() {
-        @Override
-        protected void updateItem(String item, boolean empty) {
-            super.updateItem(item, empty);
-            setText(empty || item == null ? "Marca" : item);
+    @FXML
+    private void invertirLista() {
+
+        invertido = !invertido;
+
+        if (invertido) {
+            btnInvertir.setText("Orden normal");
+            mostrarGraficasInverso();
+        } else {
+            btnInvertir.setText("Invertir lista");
+
+            if (comboPrecio.getValue() == null && comboMarca.getValue() == null) {
+                mostrarGraficas();
+            } else {
+                mostrarGraficasFiltradas();
+            }
         }
-    });
-
-    mostrarGraficas();
-}
+    }
 
     private ArrayList<nodoGraficas> convertirALista() {
 
-        ArrayList<nodoGraficas> array = new ArrayList<>();
+        ArrayList<nodoGraficas> listaArray = new ArrayList<>();
 
-        nodoGraficas aux = lista.inicio;
-
-        while (aux != null) {
-            array.add(aux);
-            aux = aux.sig;
+        if (lista == null || lista.inicio == null) {
+            return listaArray;
         }
 
-        return array;
+        // recorrido hacia adelante
+        nodoGraficas actual = lista.inicio;
+
+        while (actual != null) {
+            listaArray.add(actual);
+            actual = actual.sig;
+        }
+
+        // recorrido hacia atras
+        nodoGraficas ultimo = lista.inicio;
+
+        while (ultimo.sig != null) {
+            ultimo = ultimo.sig;
+        }
+
+        while (ultimo != null) {
+            ultimo = ultimo.ant;
+        }
+
+        return listaArray;
     }
 
     public void mostrarCatalogo() {
         rootContainer.getChildren().setAll(vistaCatalogo);
     }
-    
+
     //  metodo que permite agregar un nuevo producto o aumentar el stock si ya existe
     public void agregarOActualizarProducto(
             String codigo,
@@ -407,7 +483,7 @@ public class CatalogoController implements Initializable {
                         Integer.parseInt(cantidad),
                         imagen
                 );
-                
+
                 // se agrega el nuevo producto a la lista enlazada
                 lista.agregar(nuevo);
 
@@ -426,7 +502,7 @@ public class CatalogoController implements Initializable {
             e.printStackTrace();
         }
     }
-    
+
     public ListaGraficas getLista() {
         return lista;
     }
@@ -523,8 +599,11 @@ public class CatalogoController implements Initializable {
                 GraficaService.guardarLista(lista);
 
                 // refresca la interfaz
-                mostrarGraficas();
-
+                if (invertido) {
+                    mostrarGraficasInverso();
+                } else {
+                    mostrarGraficas();
+                }
                 // alerta con nombre del producto
                 mostrarAlerta(
                         "carrito",
@@ -554,13 +633,12 @@ public class CatalogoController implements Initializable {
         VBox.setVgrow(spacer, Priority.ALWAYS);
 
         // boton favoritos
-        Button favBtn = new Button("Favoritos");
+        Button favBtn = new Button("Agregar a favoritos");
         favBtn.getStyleClass().add("boton-favorito");
 
         favBtn.setOnAction(e -> {
 
             // aqui ira la logica de favoritos
-            
             // alerta con nombre del producto
             mostrarAlerta(
                     "favoritos",
@@ -580,10 +658,12 @@ public class CatalogoController implements Initializable {
                 spacer,
                 botones
         );
-        
+
         card.setOnMouseClicked(e -> {
 
-            if (e.getTarget() instanceof Button) return;
+            if (e.getTarget() instanceof Button) {
+                return;
+            }
 
             abrirDetalleProducto(g);
         });
@@ -626,7 +706,7 @@ public class CatalogoController implements Initializable {
             e.printStackTrace();
         }
     }
-    
+
     // metodo utilitario para mostrar alertas informativas al usuario, se reutiliza en acciones como agregar al carrito o favoritos
     private void mostrarAlerta(
             String titulo,
@@ -638,7 +718,7 @@ public class CatalogoController implements Initializable {
                 = new javafx.scene.control.Alert(
                         javafx.scene.control.Alert.AlertType.INFORMATION
                 );
-        
+
         alert.setTitle(titulo);
         alert.setHeaderText(null);
 
