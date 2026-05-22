@@ -3,6 +3,7 @@ package controller;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -633,12 +634,13 @@ public class CatalogoController implements Initializable {
         VBox.setVgrow(spacer, Priority.ALWAYS);
 
         // boton favoritos
-        Button favBtn = new Button("Agregar a favoritos");
+        Button favBtn = new Button("Favoritos");
         favBtn.getStyleClass().add("boton-favorito");
 
         favBtn.setOnAction(e -> {
 
             // aqui ira la logica de favoritos
+            
             // alerta con nombre del producto
             mostrarAlerta(
                     "favoritos",
@@ -726,4 +728,9 @@ public class CatalogoController implements Initializable {
         alert.setContentText(mensaje);
         alert.showAndWait();
     }
+
+    @FXML
+    private void favoritos(ActionEvent event) {
+    }
+    
 }

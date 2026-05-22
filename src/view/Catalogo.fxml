@@ -27,7 +27,7 @@
                 </Label>
                 <Region HBox.hgrow="ALWAYS" />
                 <Button styleClass="boton-topbar" text="Carrito" />
-                <Button styleClass="boton-topbar" text="Favoritos" />
+                <Button onAction="#favoritos" styleClass="boton-topbar" text="Favoritos" />
                 <Button fx:id="btnUsuario" styleClass="boton-usuario" text="Usuario" />
             </HBox>
         </top>
