@@ -1,5 +1,6 @@
 package controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -301,9 +302,9 @@ public class CatalogoController implements Initializable {
             return;
         }
 
-        String ordenPrecio = comboPrecio.getValue() != null 
-        ? comboPrecio.getValue() 
-        : "Sin orden";
+        String ordenPrecio = comboPrecio.getValue() != null
+                ? comboPrecio.getValue()
+                : "Sin orden";
         String marcaSeleccionada = comboMarca.getValue();
 
         final String marcaFiltro
@@ -634,18 +635,16 @@ public class CatalogoController implements Initializable {
         VBox.setVgrow(spacer, Priority.ALWAYS);
 
         // boton favoritos
-        Button favBtn = new Button("Favoritos");
+        Button favBtn = new Button("Agregar a favoritos");
         favBtn.getStyleClass().add("boton-favorito");
 
         favBtn.setOnAction(e -> {
-
-            // aqui ira la logica de favoritos
-            
-            // alerta con nombre del producto
-            mostrarAlerta(
-                    "favoritos",
-                    g.nombre + " agregado a favoritos"
-            );
+            if (PilaFavoritos.repetido(g.codigo)) {
+                mostrarAlerta("", "Esta gráfica ya está en tu lista de favoritos");
+            } else {
+                PilaFavoritos.agregar(g);
+                mostrarAlerta("favoritos", g.nombre + " agregado a favoritos");
+            }
         });
 
         // contenedor de botones
@@ -731,6 +730,18 @@ public class CatalogoController implements Initializable {
 
     @FXML
     private void favoritos(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/favoritos.fxml"));
+            Parent vistaFav = loader.load();
+
+            FavoritosController f = loader.getController();
+            f.mostrarFavoritos();
+            f.setCatalogoController(this);
+
+            rootContainer.getChildren().setAll(vistaFav);
+
+        } catch (IOException e) {
+        }
     }
-    
+
 }

@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import model.PilaFavoritos;
 import model.nodoGraficas;
 
 
@@ -112,8 +113,8 @@ private void volverAlCatalogo() {
                 lblCantidad.setText("Stock: " + p.cantidad);
 
                 mostrarAlerta(
-                    "favoritos",
-                    p.nombre + " agregado a favoritos"
+                    "carrito",
+                    p.nombre + " agregado al carrito"
             );
 
             } else {
@@ -124,10 +125,9 @@ private void volverAlCatalogo() {
 
         // boton de favoritos
         btnFav.setOnAction(e -> {
-            mostrarAlerta(
-                    "favoritos",
-                    p.nombre + " agregado a favoritos"
-            );
+             if(PilaFavoritos.repetido(p.codigo)) {mostrarAlerta( "","Esta gráfica ya está en tu lista de favoritos");}
+            else{ PilaFavoritos.agregar(p);    
+            mostrarAlerta( "favoritos",p.nombre + " agregado a favoritos");   }
         });
     }
     
@@ -151,4 +151,3 @@ private void volverAlCatalogo() {
         alert.showAndWait();
     }
 }
-
