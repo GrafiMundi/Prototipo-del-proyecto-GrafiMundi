@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox xmlns:fx="http://javafx.com/fxml" xmlns="http://javafx.com/javafx/25" fx:controller="controller.ItemCarritoController" spacing="20" alignment="CENTER_LEFT" style="-fx-padding: 15; -fx-background-color: white; -fx-border-color: #dcdcdc; -fx-border-radius: 12; -fx-background-radius: 12;">
+
+    <children>
+
+        <!-- imagen -->
+        <ImageView fx:id="imgProducto"
+                   fitWidth="150"
+                   fitHeight="130"
+                   preserveRatio="false"/>
+
+        <!-- info -->
+        <VBox spacing="10" HBox.hgrow="ALWAYS">
+
+            <children>
+
+                <!-- nombre de la grafica -->
+                <Label fx:id="lblNombre"
+                       wrapText="true"
+                       style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+                <!-- controles (boton mas o menos) -->
+                <HBox spacing="10" alignment="CENTER_LEFT">
+
+                    <children>
+
+                        <Button fx:id="btnMenos" text="-" />
+
+                        <Label fx:id="lblCantidad"
+                               text="1"
+                               style="-fx-font-size: 14px;"/>
+
+                        <Button fx:id="btnMas" text="+" />
+
+                        <Label fx:id="lblDisponibles"
+                               style="-fx-text-fill: #666;"/>
+
+                    </children>
+
+                </HBox>
+
+            </children>
+
+        </VBox>
+
+        <!-- informacion de la derecha -->
+        <VBox alignment="CENTER_RIGHT" spacing="15">
+
+            <children>
+
+                <Label fx:id="lblPrecio"
+                       style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+                <Button fx:id="btnEliminar"
+                        text="Eliminar"
+                        style="-fx-background-color: #e0e0e0;
+                               -fx-background-radius: 15;"/>
+
+            </children>
+
+        </VBox>
+
+    </children>
+
+</HBox>

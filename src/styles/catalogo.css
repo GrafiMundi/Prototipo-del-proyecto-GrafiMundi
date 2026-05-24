@@ -20,9 +20,12 @@
 .boton-topbar {
     -fx-background-color: #2f3e46;
     -fx-text-fill: white;
+    -fx-font-size: 12px;
     -fx-font-weight: bold;
     -fx-background-radius: 12;
-    -fx-padding: 7 15 7 15;
+    -fx-pref-width: 90px;
+    -fx-pref-height: 35px;
+    -fx-alignment: CENTER;
     -fx-cursor: hand;
 }
 

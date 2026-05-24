@@ -1,109 +1,131 @@
 package controller;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import model.nodoGraficas;
 
-public class CarritoController {
+public class CarritoController implements Initializable {
 
-    // inicio y final de la lista
+    // ui principal donde se renderizan los items del carrito
+    @FXML
+    private VBox contenedorCarrito;
+
+    // labels de resumen
+    @FXML
+    private Label lblTotal;
+
+    @FXML
+    private Label lblSubtotal;
+
+    @FXML
+    private Label lblCantidad;
+
+    // lista doble enlazada
     private nodoGraficas cabeza;
     private nodoGraficas cola;
-
+    
     // tamaño del carrito
     private int tamaño;
 
-    // constructor
     public CarritoController() {
-
         cabeza = null;
         cola = null;
-
         tamaño = 0;
     }
 
-    // metodo que agregara un producto al carrito
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        actualizarVista();
+    }
+
+    // metodo para agregar producto a la lista
     public void agregarProducto(nodoGraficas producto) {
 
-        // SI EL CARRITO ESTÁ VACÍO
+        // si la lista esta vacia se inicializa
         if (cabeza == null) {
-
             cabeza = cola = producto;
-
         } else {
-
+            // se agrega al final
             cola.sig = producto;
-
             producto.ant = cola;
-
             cola = producto;
         }
 
         tamaño++;
 
-        System.out.println(
-                producto.getNombre()
-                + " agregado al carrito."
-        );
+        // se refresca la vista
+        actualizarVista();
     }
 
-    // mostrar carrito
-    public void mostrarCarrito() {
+    // metodo principal que renderiza el carrito usando fxml
+    @FXML
+    public void actualizarVista() {
 
-        if (cabeza == null) {
-
-            System.out.println(
-                    "El carrito está vacío."
-            );
-
-            return;
-        }
+        // limpiar contenedor antes de volver a dibujar
+        contenedorCarrito.getChildren().clear();
 
         nodoGraficas actual = cabeza;
 
-        System.out.println(
-                "\n======= CARRITO ======="
-        );
+        int cantidadProductos = 0;
+        double totalGeneral = 0;
 
+        // recorrer la lista doble
         while (actual != null) {
 
-            System.out.println(
-                    "Código: "
-                    + actual.getCodigo()
-            );
+            nodoGraficas productoActual = actual;
 
-            System.out.println(
-                    "Nombre: "
-                    + actual.getNombre()
-            );
+            try {
 
-            System.out.println(
-                    "Precio: $"
-                    + actual.getPrecio()
-            );
+                // cargar el fxml de cada item del carrito
+                FXMLLoader loader = new FXMLLoader(
+                        getClass().getResource("/view/ItemCarrito.fxml")
+                );
 
-            System.out.println(
-                    "Cantidad: "
-                    + actual.getCantidad()
-            );
+                // cargar la vista como un hbox
+                HBox item = loader.load();
 
-            System.out.println(
-                    "Subtotal: $"
-                    + actual.subtotal()
-            );
+                // obtener el controller del item
+                ItemCarritoController controller = loader.getController();
 
-            System.out.println(
-                    "----------------------"
-            );
+                // pasar el producto al item
+                controller.setProducto(productoActual);
+                
+                // pasar referencia del carrito al item
+                controller.setCarritoController(this);
+
+                // agregar el item al contenedor principal
+                contenedorCarrito.getChildren().add(item);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            // acumular totales usando tu metodo subtotal
+            totalGeneral += productoActual.subtotal();
+
+            // acumular cantidad total de productos
+            cantidadProductos += productoActual.getCantidad();
 
             actual = actual.sig;
         }
 
-        System.out.println(
-                "TOTAL: $"
-                + calcularTotal()
-        );
+        // actualizar labels del resumen
+        lblCantidad.setText(String.valueOf(cantidadProductos));
+        lblTotal.setText("$" + String.format("%,.0f", totalGeneral));
+
+        // actualizar subtotal si existe en el fxml
+        if (lblSubtotal != null) {
+            lblSubtotal.setText("$" + String.format("%,.0f", totalGeneral));
+        }
     }
 
-    // metodo que eliminara un producto
+    // metodo para eliminar un producto por codigo
     public void eliminarProducto(String codigo) {
 
         nodoGraficas actual = cabeza;
@@ -112,158 +134,54 @@ public class CarritoController {
 
             if (actual.getCodigo().equals(codigo)) {
 
-                // nodo unico
+                // caso: solo hay un elemento
                 if (cabeza == cola) {
-
                     cabeza = cola = null;
-                } // eliminar cabeza
+                }
+                // caso: eliminar cabeza
                 else if (actual == cabeza) {
-
                     cabeza = cabeza.sig;
-
                     cabeza.ant = null;
-                } // eliminar cola
+                }
+                // caso: eliminar cola
                 else if (actual == cola) {
-
                     cola = cola.ant;
-
                     cola.sig = null;
-                } // eliminar
+                }
+                // caso: nodo intermedio
                 else {
-
                     actual.ant.sig = actual.sig;
-
                     actual.sig.ant = actual.ant;
                 }
 
                 tamaño--;
-
-                System.out.println(
-                        "Producto eliminado."
-                );
-
                 return;
             }
 
             actual = actual.sig;
         }
-
-        System.out.println(
-                "Producto no encontrado."
-        );
     }
 
-    // metodo que buscar el producto
-    public nodoGraficas buscarProducto(
-            String codigo
-    ) {
-
-        nodoGraficas actual = cabeza;
-
-        while (actual != null) {
-
-            if (actual.getCodigo().equals(codigo)) {
-
-                return actual;
-            }
-
-            actual = actual.sig;
-        }
-
-        return null;
-    }
-
-    // metodo que actualiza la cantidad
-    public void actualizarCantidad(
-            String codigo,
-            int nuevaCantidad
-    ) {
-
-        nodoGraficas producto
-                = buscarProducto(codigo);
-
-        if (producto != null) {
-
-            producto.setCantidad(
-                    nuevaCantidad
-            );
-
-            System.out.println(
-                    "Cantidad actualizada."
-            );
-
-        } else {
-
-            System.out.println(
-                    "Producto no encontrado."
-            );
-        }
-    }
-
-    // metodo que calcula el total
+    // calcular total general del carrito
     public double calcularTotal() {
 
         double total = 0;
-
         nodoGraficas actual = cabeza;
 
         while (actual != null) {
-
             total += actual.subtotal();
-
             actual = actual.sig;
         }
 
         return total;
     }
 
-    // metodo que vacia el carrito
-    public void vaciarCarrito() {
-
+    // vaciar completamente el carrito
+    @FXML
+    public void vaciarCarritoUI() {
         cabeza = null;
-
         cola = null;
-
         tamaño = 0;
-
-        System.out.println(
-                "Carrito vaciado."
-        );
-    }
-
-    // metodo que cambiara el orden en que se ve el carrito
-    public void mostrarInverso() {
-
-        if (cola == null) {
-
-            System.out.println(
-                    "Carrito vacío."
-            );
-
-            return;
-        }
-
-        nodoGraficas actual = cola;
-
-        System.out.println(
-                "\n=== CARRITO INVERSO ==="
-        );
-
-        while (actual != null) {
-
-            System.out.println(
-                    actual.getNombre()
-                    + " - $"
-                    + actual.getPrecio()
-            );
-
-            actual = actual.ant;
-        }
-    }
-
-    // metodo para obtener el tamaño del carrito 
-    public int obtenerTamaño() {
-
-        return tamaño;
+        actualizarVista();
     }
 }
