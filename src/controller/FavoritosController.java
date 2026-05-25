@@ -20,7 +20,7 @@ public class FavoritosController {
 
     @FXML
     private VBox vxFav;
-    
+
     @FXML
     private Label lblvacio;
 
@@ -45,6 +45,7 @@ public class FavoritosController {
 
             FavController controller = loader.getController();
             controller.setDatos(g);
+            controller.setFC(this);
 
             vxFav.getChildren().add(panel);
         } catch (IOException e) {
@@ -63,6 +64,10 @@ public class FavoritosController {
         if (catalogoController != null) {
             catalogoController.mostrarCatalogo();
         }
+    }
+
+    public void labelvacio() {
+        lblvacio.setText("No hay productos favoritos");
     }
 
 }

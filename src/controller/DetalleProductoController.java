@@ -8,10 +8,10 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import model.PilaFavoritos;
 import model.nodoGraficas;
-
+import servicios.CarritoService;
 
 public class DetalleProductoController {
-    
+
     private CatalogoController catalogoController;
 
     public void setCatalogoController(CatalogoController c) {
@@ -23,7 +23,7 @@ public class DetalleProductoController {
 
     @FXML
     private Label lblPrecio;
-    
+
     @FXML
     private Label lblPrecioPanel;
 
@@ -44,27 +44,43 @@ public class DetalleProductoController {
 
     @FXML
     private Button btnCarrito;
-    
+
     @FXML
     private Button btnVolver;
 
     @FXML
-private void volverAlCatalogo() {
+    private void volverAlCatalogo() {
 
-    if (catalogoController != null) {
-        catalogoController.mostrarCatalogo();
+        if (catalogoController != null) {
+            catalogoController.mostrarCatalogo();
+        }
     }
-}
+
+    // validar si ya esta en carrito
+    private boolean estaEnCarrito(String codigo) {
+
+        nodoGraficas aux = CarritoService.getCarrito();
+
+        while (aux != null) {
+            if (aux.codigo.equals(codigo)) {
+                return true;
+            }
+            aux = aux.sig;
+        }
+
+        return false;
+    }
+
     public void setProducto(nodoGraficas p) {
 
         lblNombre.setText(p.nombre);
         lblPrecioPanel.setText(p.nombre);
-        
+
         // formato de precio
         lblPrecio.setText("$ " + String.format("%,.0f", p.precio));
         lblPrecioPanel.setText("$ " + String.format("%,.0f", p.precio));
 
-        // evitar null en descripcion (evita una descipcion vacia)
+        // evitar null en descripcion
         lblDescripcion.setText(
                 (p.descripcion != null && !p.descripcion.isEmpty())
                 ? p.descripcion
@@ -94,59 +110,68 @@ private void volverAlCatalogo() {
             System.out.println("error cargando imagen: " + p.imagen);
         }
 
-        // cambiar titulo de ventana
+        // titulo de ventana
         try {
             Stage stage = (Stage) lblNombre.getScene().getWindow();
             if (stage != null) {
                 stage.setTitle(p.nombre);
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
+
+        // estado inicial del boton
+        if (estaEnCarrito(p.codigo)) {
+            btnCarrito.setText("Ya agregado al carrito");
+            btnCarrito.setDisable(true);
+        }
 
         // boton del carrito
         btnCarrito.setOnAction(e -> {
 
             if (p.cantidad > 0) {
 
-                p.cantidad--;
+                CarritoService.agregarProducto(p);
 
-                //muestra conceptual de como debe disminuir el stock luego de comprar algo (por el momento solo se reduce para dar una idea de como se vera)
-                lblCantidad.setText("Stock: " + p.cantidad);
+                btnCarrito.setText("Ya agregado al carrito");
+                btnCarrito.setDisable(true);
 
                 mostrarAlerta(
-                    "carrito",
-                    p.nombre + " agregado al carrito"
-            );
+                        "Carrito",
+                        p.nombre + " agregado al carrito"
+                );
 
             } else {
 
-                System.out.println("Sin stock de " + p.nombre);
+                mostrarAlerta(
+                        "Sin stock",
+                        "No hay unidades disponibles de " + p.nombre
+                );
             }
         });
 
-        // boton de favoritos
+        // favoritos
         btnFav.setOnAction(e -> {
-             if(PilaFavoritos.repetido(p.codigo)) {mostrarAlerta( "","Esta gráfica ya está en tu lista de favoritos");}
-            else{ PilaFavoritos.agregar(p);    
-            mostrarAlerta( "favoritos",p.nombre + " agregado a favoritos");   }
+            if (PilaFavoritos.repetido(p.codigo)) {
+                mostrarAlerta("", "Esta gráfica ya está en tu lista de favoritos");
+            } else {
+                PilaFavoritos.agregar(p);
+                mostrarAlerta("favoritos", p.nombre + " agregado a favoritos");
+            }
         });
     }
-    
-    // metodo utilitario para mostrar alertas informativas al usuario, se reutiliza en acciones como agregar al carrito o favoritos
+
     private void mostrarAlerta(
             String titulo,
             String mensaje
     ) {
 
-        // crea una alerta de tipo informacion
         javafx.scene.control.Alert alert
                 = new javafx.scene.control.Alert(
                         javafx.scene.control.Alert.AlertType.INFORMATION
                 );
-        
+
         alert.setTitle(titulo);
         alert.setHeaderText(null);
-
-        // mensaje principal que se mostrara al usuario
         alert.setContentText(mensaje);
         alert.showAndWait();
     }

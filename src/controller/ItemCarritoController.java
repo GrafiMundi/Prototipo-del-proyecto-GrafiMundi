@@ -1,101 +1,127 @@
 package controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.scene.image.*;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import model.nodoGraficas;
+import servicios.GraficaService;
 
 public class ItemCarritoController {
 
-    @FXML 
-    private ImageView imgProducto;
-    
-    @FXML 
+    @FXML
     private Label lblNombre;
-    
-    @FXML 
+
+    @FXML
     private Label lblPrecio;
-    
-    @FXML 
+
+    @FXML
     private Label lblCantidad;
-    
-    @FXML 
+
+    @FXML
     private Label lblDisponibles;
 
-    @FXML 
-    private Button btnMas;
-    
-    @FXML 
-    private Button btnMenos;
-    
-    @FXML 
-    private Button btnEliminar;
+    @FXML
+    private ImageView imgProducto;
 
     private nodoGraficas producto;
-    private int cantidadSeleccionada = 1;
+    private int cantidad;
+
+    // stock real disponible
+    private int stockDisponible;
+
     private CarritoController carritoController;
 
-    public void setProducto(nodoGraficas p) {
-        this.producto = p;
+    public void inicializar(nodoGraficas producto, CarritoController carritoController) {
 
-        lblNombre.setText(p.getNombre());
+        this.producto = producto;
+        this.carritoController = carritoController;
+        this.cantidad = 1;
 
-        lblPrecio.setText("$ " + String.format("%,.0f", p.getPrecio()));
+        lblNombre.setText(producto.getNombre());
+        lblPrecio.setText("$ " + String.format("%,.0f", producto.getPrecio()));
 
-        lblDisponibles.setText("+" + p.getCantidad() + " disponibles");
+        // cargar imagen
+        cargarImagen(producto.getImagen());
 
-        lblCantidad.setText(String.valueOf(cantidadSeleccionada));
+        // leer stock
+        stockDisponible = obtenerStockDesdeArchivo(producto.getCodigo());
 
-        // carga de imagen
+        actualizarVista();
+    }
+
+    // carga de imagen
+    private void cargarImagen(String nombreImagen) {
+
         try {
-            String ruta = "/ImagenesGrafiMundi/" + p.getImagen();
-
             Image img = new Image(
-                getClass().getResource(ruta).toExternalForm()
+                    getClass().getResourceAsStream("/ImagenesGrafiMundi/" + nombreImagen)
             );
 
             imgProducto.setImage(img);
 
         } catch (Exception e) {
-            System.out.println("error cargando imagen carrito: " + p.getImagen());
+            System.out.println("Error cargando imagen: " + nombreImagen);
+        }
+    }
+
+    private int obtenerStockDesdeArchivo(String codigo) {
+
+        var lista = GraficaService.cargarLista();
+        var aux = lista.inicio;
+
+        while (aux != null) {
+            if (aux.getCodigo().equals(codigo)) {
+                return aux.getCantidad();
+            }
+            aux = aux.sig;
         }
 
-        configurarEventos();
-    }
-    
-    public void setCarritoController(CarritoController controller) {
-        this.carritoController = controller;
+        return 0;
     }
 
-    private void configurarEventos() {
+    private void actualizarVista() {
 
-        btnMas.setOnAction(e -> {
-            if (cantidadSeleccionada < producto.getCantidad()) {
-                cantidadSeleccionada++;
-                lblCantidad.setText(String.valueOf(cantidadSeleccionada));
-                
-                producto.setCantidad(cantidadSeleccionada);
-                carritoController.actualizarVista();
-            }
-        });
+        lblCantidad.setText(String.valueOf(cantidad));
+        lblDisponibles.setText(stockDisponible + " disponibles");
+    }
 
-        btnMenos.setOnAction(e -> {
-            if (cantidadSeleccionada > 1) {
-                cantidadSeleccionada--;
-                lblCantidad.setText(String.valueOf(cantidadSeleccionada));
-                
-                producto.setCantidad(cantidadSeleccionada);
-                carritoController.actualizarVista();
-            }
-        });
+    // boton para aumentar cantidad
+    @FXML
+    private void aumentarCantidad() {
 
-        btnEliminar.setOnAction(e -> {
+        if (cantidad < stockDisponible) {
+            cantidad++;
+            actualizarVista();
+            carritoController.actualizarTotales();
+        }
+    }
 
-            // eliminar del carrito
-            if (carritoController != null) {
-                carritoController.eliminarProducto(producto.getCodigo());
-                carritoController.actualizarVista();
-            }
-        });
+    // boton para disminuir cantidad
+    @FXML
+    private void disminuirCantidad() {
+
+        if (cantidad > 1) {
+            cantidad--;
+            actualizarVista();
+            carritoController.actualizarTotales();
+        }
+    }
+
+    @FXML
+    private void eliminarItem() {
+        carritoController.eliminarItem(this);
+    }
+
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public double getPrecio() {
+        return producto.getPrecio();
+    }
+
+    public nodoGraficas getProducto() {
+        return producto;
     }
 }

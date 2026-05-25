@@ -2,186 +2,220 @@ package controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
+import javafx.fxml.*;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import model.ListaGraficas;
 import model.nodoGraficas;
+import servicios.CarritoService;
+import servicios.GraficaService;
 
 public class CarritoController implements Initializable {
 
-    // ui principal donde se renderizan los items del carrito
     @FXML
     private VBox contenedorCarrito;
 
-    // labels de resumen
     @FXML
     private Label lblTotal;
 
     @FXML
-    private Label lblSubtotal;
-
-    @FXML
     private Label lblCantidad;
 
-    // lista doble enlazada
-    private nodoGraficas cabeza;
-    private nodoGraficas cola;
-    
-    // tamaño del carrito
-    private int tamaño;
+    @FXML
+    private Label lblVacio;
 
-    public CarritoController() {
-        cabeza = null;
-        cola = null;
-        tamaño = 0;
+    private CatalogoController catalogoController;
+
+    public void setCatalogoController(CatalogoController c) {
+        this.catalogoController = c;
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        actualizarVista();
+        cargarItems();
     }
 
-    // metodo para agregar producto a la lista
-    public void agregarProducto(nodoGraficas producto) {
+    public void cargarItems() {
 
-        // si la lista esta vacia se inicializa
-        if (cabeza == null) {
-            cabeza = cola = producto;
-        } else {
-            // se agrega al final
-            cola.sig = producto;
-            producto.ant = cola;
-            cola = producto;
-        }
-
-        tamaño++;
-
-        // se refresca la vista
-        actualizarVista();
-    }
-
-    // metodo principal que renderiza el carrito usando fxml
-    @FXML
-    public void actualizarVista() {
-
-        // limpiar contenedor antes de volver a dibujar
         contenedorCarrito.getChildren().clear();
 
-        nodoGraficas actual = cabeza;
+        nodoGraficas actual = CarritoService.getCarrito();
 
-        int cantidadProductos = 0;
-        double totalGeneral = 0;
-
-        // recorrer la lista doble
         while (actual != null) {
 
-            nodoGraficas productoActual = actual;
-
             try {
-
-                // cargar el fxml de cada item del carrito
                 FXMLLoader loader = new FXMLLoader(
                         getClass().getResource("/view/ItemCarrito.fxml")
                 );
 
-                // cargar la vista como un hbox
                 HBox item = loader.load();
 
-                // obtener el controller del item
                 ItemCarritoController controller = loader.getController();
+                controller.inicializar(actual, this);
 
-                // pasar el producto al item
-                controller.setProducto(productoActual);
-                
-                // pasar referencia del carrito al item
-                controller.setCarritoController(this);
+                item.setUserData(controller);
 
-                // agregar el item al contenedor principal
                 contenedorCarrito.getChildren().add(item);
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            // acumular totales usando tu metodo subtotal
-            totalGeneral += productoActual.subtotal();
-
-            // acumular cantidad total de productos
-            cantidadProductos += productoActual.getCantidad();
-
             actual = actual.sig;
         }
 
-        // actualizar labels del resumen
-        lblCantidad.setText(String.valueOf(cantidadProductos));
-        lblTotal.setText("$" + String.format("%,.0f", totalGeneral));
-
-        // actualizar subtotal si existe en el fxml
-        if (lblSubtotal != null) {
-            lblSubtotal.setText("$" + String.format("%,.0f", totalGeneral));
-        }
+        actualizarEstadoVacio();
+        actualizarTotales();
     }
 
-    // metodo para eliminar un producto por codigo
-    public void eliminarProducto(String codigo) {
+    public void actualizarTotales() {
 
-        nodoGraficas actual = cabeza;
-
-        while (actual != null) {
-
-            if (actual.getCodigo().equals(codigo)) {
-
-                // caso: solo hay un elemento
-                if (cabeza == cola) {
-                    cabeza = cola = null;
-                }
-                // caso: eliminar cabeza
-                else if (actual == cabeza) {
-                    cabeza = cabeza.sig;
-                    cabeza.ant = null;
-                }
-                // caso: eliminar cola
-                else if (actual == cola) {
-                    cola = cola.ant;
-                    cola.sig = null;
-                }
-                // caso: nodo intermedio
-                else {
-                    actual.ant.sig = actual.sig;
-                    actual.sig.ant = actual.ant;
-                }
-
-                tamaño--;
-                return;
-            }
-
-            actual = actual.sig;
-        }
-    }
-
-    // calcular total general del carrito
-    public double calcularTotal() {
-
+        int cantidad = 0;
         double total = 0;
-        nodoGraficas actual = cabeza;
 
-        while (actual != null) {
-            total += actual.subtotal();
-            actual = actual.sig;
+        for (Node node : contenedorCarrito.getChildren()) {
+
+            ItemCarritoController item
+                    = (ItemCarritoController) node.getUserData();
+
+            cantidad += item.getCantidad();
+            total += item.getCantidad() * item.getPrecio();
         }
 
-        return total;
+        lblCantidad.setText(String.valueOf(cantidad));
+        lblTotal.setText("$ " + String.format("%,.0f", total));
+
     }
 
-    // vaciar completamente el carrito
+    private void actualizarEstadoVacio() {
+
+        if (contenedorCarrito.getChildren().isEmpty()) {
+            lblVacio.setVisible(true);
+            lblVacio.setManaged(true);
+        } else {
+            lblVacio.setVisible(false);
+            lblVacio.setManaged(false);
+        }
+    }
+
+    public void eliminarItem(ItemCarritoController itemCtrl) {
+
+        Node nodoAEliminar = null;
+
+        for (Node node : contenedorCarrito.getChildren()) {
+            if (node.getUserData() == itemCtrl) {
+                nodoAEliminar = node;
+                break;
+            }
+        }
+
+        if (nodoAEliminar != null) {
+            contenedorCarrito.getChildren().remove(nodoAEliminar);
+        }
+
+        // eliminar del servicio
+        CarritoService.eliminarProducto(
+                itemCtrl.getProducto().getCodigo()
+        );
+
+        actualizarTotales();
+        actualizarEstadoVacio();
+    }
+
+    public void realizarCompra() {
+
+        // cargar lista desde TXT
+        ListaGraficas lista = GraficaService.cargarLista();
+
+        // validar stock
+        for (Node node : contenedorCarrito.getChildren()) {
+
+            ItemCarritoController item
+                    = (ItemCarritoController) node.getUserData();
+
+            nodoGraficas aux = lista.inicio;
+
+            while (aux != null) {
+
+                if (aux.getCodigo().equals(item.getProducto().getCodigo())) {
+
+                    // si no hay suficiente stock
+                    if (item.getCantidad() > aux.getCantidad()) {
+
+                        mostrarAlerta(
+                                "Error",
+                                "No hay suficiente stock para: " + aux.getNombre()
+                        );
+                        return; // detener compra
+                    }
+                }
+
+                aux = aux.sig;
+            }
+        }
+
+        // descontar stock
+        for (Node node : contenedorCarrito.getChildren()) {
+
+            ItemCarritoController item
+                    = (ItemCarritoController) node.getUserData();
+
+            nodoGraficas aux = lista.inicio;
+
+            while (aux != null) {
+
+                if (aux.getCodigo().equals(item.getProducto().getCodigo())) {
+
+                    aux.setCantidad(
+                            aux.getCantidad() - item.getCantidad()
+                    );
+                }
+
+                aux = aux.sig;
+            }
+        }
+
+        // guardar cambios en el txt
+        GraficaService.guardarLista(lista);
+
+        // alerta de compra exitosa
+        mostrarAlerta(
+                "Compra exitosa",
+                "La compra se realizó correctamente. Gracias por comprar con nosotros"
+        );
+
+        // limpiar carrito
+        CarritoService.vaciarCarrito();
+        contenedorCarrito.getChildren().clear();
+        actualizarEstadoVacio();
+        actualizarTotales();
+
+        // recargar catalogo
+        if (catalogoController != null) {
+            catalogoController.recargarCatalogo();
+        }
+    }
+
+    private void mostrarAlerta(String titulo, String mensaje) {
+
+        javafx.scene.control.Alert alert
+                = new javafx.scene.control.Alert(
+                        javafx.scene.control.Alert.AlertType.INFORMATION
+                );
+
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+
+        alert.showAndWait();
+    }
+
     @FXML
-    public void vaciarCarritoUI() {
-        cabeza = null;
-        cola = null;
-        tamaño = 0;
-        actualizarVista();
+    private void volverAlCatalogo() {
+        if (catalogoController != null) {
+            catalogoController.mostrarCatalogo();
+        }
     }
 }

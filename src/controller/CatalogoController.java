@@ -221,7 +221,7 @@ public class CatalogoController implements Initializable {
 
         // accion cerrar sesion
         cerrar.setOnAction(e -> {
-
+            PilaFavoritos.limpiarPila();
             cerrarSesion();
         });
 
@@ -446,8 +446,23 @@ public class CatalogoController implements Initializable {
         return listaArray;
     }
 
+    private boolean estaEnCarrito(String codigo) {
+
+        nodoGraficas aux = servicios.CarritoService.getCarrito();
+
+        while (aux != null) {
+            if (aux.getCodigo().equals(codigo)) {
+                return true;
+            }
+            aux = aux.sig;
+        }
+
+        return false;
+    }
+
     public void mostrarCatalogo() {
         rootContainer.getChildren().setAll(vistaCatalogo);
+        mostrarGraficas();
     }
 
     //  metodo que permite agregar un nuevo producto o aumentar el stock si ya existe
@@ -507,6 +522,16 @@ public class CatalogoController implements Initializable {
 
     public ListaGraficas getLista() {
         return lista;
+    }
+
+    public void recargarCatalogo() {
+        lista = GraficaService.cargarLista();
+
+        if (invertido) {
+            mostrarGraficasInverso();
+        } else {
+            mostrarGraficas();
+        }
     }
 
     // crea la tarjeta visual de cada producto
@@ -586,27 +611,28 @@ public class CatalogoController implements Initializable {
         descripcion.getStyleClass().add("descripcion-producto");
 
         // boton comprar
-        Button btn = new Button("Agregar al carrito");
+        Button btn = new Button();
         btn.getStyleClass().add("boton-comprar");
+
+        // estado inicial del botón
+        if (estaEnCarrito(g.codigo)) {
+            btn.setText("Ya agregado");
+            btn.setDisable(true);
+        } else {
+            btn.setText("Agregar al carrito");
+        }
 
         btn.setOnAction(e -> {
 
-            // verifica si hay stock disponible
             if (g.cantidad > 0) {
 
-                // reduce el stock en 1
-                g.cantidad--;
+                // agregar al carrito
+                servicios.CarritoService.agregarProducto(g);
 
-                // guarda los cambios en el archivo
-                GraficaService.guardarLista(lista);
+                // cambiar el texto
+                btn.setText("Ya agregado");
+                btn.setDisable(true);
 
-                // refresca la interfaz
-                if (invertido) {
-                    mostrarGraficasInverso();
-                } else {
-                    mostrarGraficas();
-                }
-                // alerta con nombre del producto
                 mostrarAlerta(
                         "carrito",
                         g.nombre + " agregado al carrito"
@@ -614,7 +640,6 @@ public class CatalogoController implements Initializable {
 
             } else {
 
-                // alerta si no hay stock
                 mostrarAlerta(
                         "sin stock",
                         "no hay unidades disponibles de " + g.nombre
@@ -672,10 +697,37 @@ public class CatalogoController implements Initializable {
         return card;
     }
 
+    @FXML
+    private void abrirCarrito() {
+
+        try {
+
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/view/carrito.fxml")
+            );
+
+            Parent root = loader.load();
+
+            CarritoController carrito = loader.getController();
+
+            carrito.cargarItems();
+
+            carrito.setCatalogoController(this);
+
+            rootContainer.getChildren().setAll(root);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     // metodo para cerrar sesion
     private void cerrarSesion() {
 
         try {
+
+            // se borra el carrito del usuario que tenia la sesion abierta para evitar carritos duplicados en otra sesiones
+            servicios.CarritoService.vaciarCarrito();
 
             // elimina la sesion actual
             UsuarioService.setUsuarioActual(null);

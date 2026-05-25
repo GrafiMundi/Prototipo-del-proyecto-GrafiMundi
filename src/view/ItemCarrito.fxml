@@ -9,14 +9,10 @@
     <children>
 
         <!-- imagen -->
-        <ImageView fx:id="imgProducto"
-                   fitWidth="150"
-                   fitHeight="130"
-                   preserveRatio="false"/>
+        <ImageView fx:id="imgProducto" fitWidth="150" fitHeight="130" preserveRatio="false"/>
 
         <!-- info -->
         <VBox spacing="10" HBox.hgrow="ALWAYS">
-
             <children>
 
                 <!-- nombre de la grafica -->
@@ -26,45 +22,23 @@
 
                 <!-- controles (boton mas o menos) -->
                 <HBox spacing="10" alignment="CENTER_LEFT">
-
                     <children>
-
-                        <Button fx:id="btnMenos" text="-" />
-
-                        <Label fx:id="lblCantidad"
-                               text="1"
-                               style="-fx-font-size: 14px;"/>
-
-                        <Button fx:id="btnMas" text="+" />
-
-                        <Label fx:id="lblDisponibles"
-                               style="-fx-text-fill: #666;"/>
-
+                        <Button fx:id="btnMenos" text="-" onAction="#disminuirCantidad" />
+                        <Label fx:id="lblCantidad" text="1" style="-fx-font-size: 14px;"/>
+                        <Button fx:id="btnMas" text="+" onAction="#aumentarCantidad" />
+                        <Label fx:id="lblDisponibles" style="-fx-text-fill: #666;"/>
                     </children>
-
                 </HBox>
-
             </children>
-
         </VBox>
 
         <!-- informacion de la derecha -->
         <VBox alignment="CENTER_RIGHT" spacing="15">
 
             <children>
-
-                <Label fx:id="lblPrecio"
-                       style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
-
-                <Button fx:id="btnEliminar"
-                        text="Eliminar"
-                        style="-fx-background-color: #e0e0e0;
-                               -fx-background-radius: 15;"/>
-
+                <Label fx:id="lblPrecio" style="-fx-font-size: 16px; -fx-text-fill: green; -fx-font-weight: bold;"/>
+                <Button fx:id="btnEliminar" text="Eliminar" onAction="#eliminarItem" style="-fx-background-color: #e0e0e0; -fx-background-radius: 15;"/>
             </children>
-
         </VBox>
-
     </children>
-
 </HBox>

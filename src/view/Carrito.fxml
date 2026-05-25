@@ -1,132 +1,115 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml"
-            xmlns="http://javafx.com/javafx/25"
-            fx:controller="controller.CarritoController"
-            stylesheets="@../styles/catalogo.css"
-            styleClass="root">
+<BorderPane styleClass="root" stylesheets="@../styles/catalogo.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CarritoController">
 
-    <!-- TOP -->
+    <!-- topbar -->
     <top>
         <HBox alignment="CENTER_LEFT" styleClass="topbar">
             <children>
-                <Label text="GrafiMundi" styleClass="titulo"/>
-
-                <!-- Empuja TODO a la derecha -->
-                <Region HBox.hgrow="ALWAYS"/>
-
-                <Button fx:id="btnVolver"
-                        text="Volver"
-                        onAction="#volverAlCatalogo"
-                        styleClass="boton-topbar"/>
+                <Label styleClass="titulo" text="GrafiMundi" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Button fx:id="btnVolver" onAction="#volverAlCatalogo" styleClass="boton-topbar" text="Volver" />
             </children>
         </HBox>
     </top>
 
-    <!-- CENTRO -->
+    <!-- info -->
     <center>
         <VBox spacing="20" style="-fx-padding: 30;">
 
-            <!-- TITULO CENTRADO -->
-            <Label text="Carrito de compras"
-                   maxWidth="Infinity"
-                   alignment="CENTER"
-                   style="-fx-font-size: 28px; -fx-font-weight: bold;"/>
+            <VBox alignment="CENTER_LEFT"
+                  spacing="5"
+                  minHeight="80"
+                  prefHeight="80"
+                  maxHeight="80">
 
-            <!-- CONTENIDO PRINCIPAL -->
-            <HBox spacing="30" alignment="TOP_LEFT">
+                <!-- mensaje superior -->
+                <Label style="-fx-font-size: 18px; -fx-font-weight: bold;"
+                       text="¡Ya casi es tuyo con GrafiMundi!" />
+                <Label alignment="CENTER"
+                       maxWidth="800" style="-fx-font-size: 14px; -fx-text-fill: #555;"
+                       text="Estás a un paso de potenciar tu setup. En GrafiMundi te ofrecemos tecnología de alto rendimiento para llevar tu equipo al siguiente nivel. Finaliza tu compra y hazlo realidad."
+                       wrapText="true" />
+            </VBox>
 
+            <!-- titulo principal -->
+            <Label alignment="CENTER" maxWidth="Infinity" style="-fx-font-size: 28px; -fx-font-weight: bold;" text="Carrito de compras" />
+
+            <!-- contenido principal -->
+            <HBox alignment="TOP_CENTER" spacing="30">
                 <children>
 
-                    <!-- IZQUIERDA: PRODUCTOS -->
-                    <VBox spacing="15" prefWidth="900" VBox.vgrow="ALWAYS">
-
+                    <!-- zona izquierda -->
+                    <VBox alignment="TOP_CENTER" prefWidth="900" spacing="15" VBox.vgrow="ALWAYS">
                         <children>
 
-                            <ScrollPane fitToWidth="true"
-                                        VBox.vgrow="ALWAYS"
-                                        style="-fx-background-color: transparent;">
+                            <!-- stackpane -->
+                            <StackPane VBox.vgrow="ALWAYS">
+                                <children>
 
-                                <content>
-                                    <VBox fx:id="contenedorCarrito"
-                                          spacing="15"
-                                          style="-fx-padding: 10;
-                                                 -fx-background-color: #f5f5f5;
-                                                 -fx-background-radius: 10;"/>
-                                </content>
+                                    <!-- lista -->
+                                    <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
+                                        <content>
+                                            <VBox fx:id="contenedorCarrito" fillWidth="true" spacing="15" style="-fx-padding: 10; -fx-background-color: #f5f5f5; -fx-background-radius: 10;" />
+                                        </content>
+                                    </ScrollPane>
 
-                            </ScrollPane>
-
+                                    <!-- mensaje de vacío -->
+                                    <Label fx:id="lblVacio" alignment="CENTER" style="-fx-text-fill: #777; -fx-font-size: 16px;" text="Aquí verás los productos que agregues a tu carrito" wrapText="true" />
+                                </children>
+                            </StackPane>
                         </children>
-
                     </VBox>
 
-                    <!-- DERECHA: RESUMEN -->
-                    <VBox prefWidth="350"
-                          alignment="TOP_CENTER"
-                          spacing="15"
-                          style="-fx-padding: 25;
-                                 -fx-background-color: white;
-                                 -fx-border-color: #e0e0e0;
-                                 -fx-border-radius: 15;
-                                 -fx-background-radius: 15;
-                                 -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10,0,0,5);">
-
+                    <!-- resumen de compra -->
+                    <VBox alignment="TOP_CENTER" maxHeight="320" maxWidth="350" minHeight="320" minWidth="350" prefHeight="320" prefWidth="350" spacing="15" style="-fx-padding: 25; -fx-background-color: white; -fx-border-color: #e0e0e0; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10,0,0,5);">
                         <children>
-
-                            <Label text="Resumen"
-                                   style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
-
+                            <Label style="-fx-font-size: 22px; -fx-font-weight: bold;" text="Resumen de compra" />
+                            <Separator style="-fx-padding: 5 0 10 0;" />
                             <HBox spacing="10">
                                 <children>
-                                    <Label text="Productos:"/>
-                                    <Label fx:id="lblCantidad" text="0"/>
+                                    <Label style="-fx-font-size: 15px; -fx-font-weight: bold;" text="Productos:" />
+                                    <Label fx:id="lblCantidad" style="-fx-font-size: 15px; -fx-font-weight: bold;" text="0" />
                                 </children>
                             </HBox>
-
                             <HBox spacing="10">
                                 <children>
-                                    <Label text="Subtotal:"/>
-                                    <Label fx:id="lblSubtotal" text="0"/>
+                                    <Label style="-fx-font-size: 15px; -fx-font-weight: bold;" text="Envío:" />
+                                    <Label style="-fx-text-fill: green; -fx-font-size: 15px; -fx-font-weight: bold;" text="Gratis a nivel nacional" />
                                 </children>
                             </HBox>
-
+                            <Separator style="-fx-padding: 10 0 5 0;" />
                             <HBox spacing="10">
                                 <children>
-                                    <Label text="Total:"/>
-                                    <Label fx:id="lblTotal" text="0"/>
+                                    <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Total:" />
+                                    <Label fx:id="lblTotal" style="-fx-text-fill: #2e7d32; -fx-font-size: 16px; -fx-font-weight: bold;" text="0" />
                                 </children>
                             </HBox>
-
-                            <Region prefHeight="20"/>
-
-                            <Button text="Continuar compra"
-                                    styleClass="boton-comprar"
-                                    maxWidth="Infinity"
-                                    style="-fx-font-size: 16px; -fx-padding: 15;"/>
-
+                            <Region VBox.vgrow="ALWAYS" />
+                            <Button maxWidth="Infinity" onAction="#realizarCompra" style="-fx-font-size: 16px; -fx-padding: 15;" styleClass="boton-comprar" text="Continuar compra" />
                         </children>
-
                     </VBox>
-
                 </children>
-
             </HBox>
-
         </VBox>
     </center>
 
-    <!-- FOOTER -->
+    <!-- footer -->
     <bottom>
         <HBox alignment="CENTER_LEFT" style="-fx-padding: 15 25;">
             <children>
-                <Label text="© 2026 GrafiMundi Colombia"
-                       style="-fx-text-fill: #777; -fx-font-size: 13px;"/>
+                <Label style="-fx-text-fill: #777; -fx-font-size: 13px;" text="© 2026 GrafiMundi Colombia" />
             </children>
         </HBox>
     </bottom>
-
 </BorderPane>
