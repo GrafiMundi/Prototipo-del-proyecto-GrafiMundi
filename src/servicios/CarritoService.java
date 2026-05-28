@@ -72,4 +72,19 @@ public class CarritoService {
     public static void vaciarCarrito() {
         cabeza = null;
     }
+
+    public static boolean existeProducto(String codigo) {
+
+        nodoGraficas aux = cabeza;
+
+        while (aux != null) {
+            if (aux.codigo.equals(codigo)) {
+                return true;
+            }
+            aux = aux.sig;
+        }
+
+        return false;
+    }
+
 }

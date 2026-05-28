@@ -460,6 +460,11 @@ public class CatalogoController implements Initializable {
         return false;
     }
 
+    private boolean estaEnFavoritos(String codigo) {
+
+        return PilaFavoritos.repetido(codigo);
+    }
+
     public void mostrarCatalogo() {
         rootContainer.getChildren().setAll(vistaCatalogo);
         mostrarGraficas();
@@ -660,14 +665,31 @@ public class CatalogoController implements Initializable {
         VBox.setVgrow(spacer, Priority.ALWAYS);
 
         // boton favoritos
-        Button favBtn = new Button("Agregar a favoritos");
+        Button favBtn = new Button();
         favBtn.getStyleClass().add("boton-favorito");
 
+        // estado inicial
+        if (estaEnFavoritos(g.codigo)) {
+            favBtn.setText("Ya en favoritos");
+            favBtn.setDisable(true);
+        } else {
+            favBtn.setText("Agregar a favoritos");
+        }
+
         favBtn.setOnAction(e -> {
+
             if (PilaFavoritos.repetido(g.codigo)) {
+
                 mostrarAlerta("", "Esta gráfica ya está en tu lista de favoritos");
+
             } else {
+
                 PilaFavoritos.agregar(g);
+
+                // actualizar botón
+                favBtn.setText("Ya en favoritos");
+                favBtn.setDisable(true);
+
                 mostrarAlerta("favoritos", g.nombre + " agregado a favoritos");
             }
         });

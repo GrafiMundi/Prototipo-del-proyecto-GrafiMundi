@@ -122,6 +122,10 @@ public class CarritoController implements Initializable {
 
         actualizarTotales();
         actualizarEstadoVacio();
+
+        if (catalogoController != null) {
+            catalogoController.recargarCatalogo();
+        }
     }
 
     public void realizarCompra() {

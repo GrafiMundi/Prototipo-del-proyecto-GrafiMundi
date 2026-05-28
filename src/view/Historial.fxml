@@ -1,11 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Region?>
 
+<BorderPane xmlns:fx="http://javafx.com/fxml" xmlns="http://javafx.com/javafx/25" fx:controller="controller.HistorialController" stylesheets="@../styles/catalogo.css" styleClass="root" prefWidth="1000" prefHeight="700">
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/25" fx:controller="controller.HistorialController">
-   <children>
-      <Label layoutX="82.0" layoutY="127.0" text="Aquí va la vista del Historial: Asemejeandose lo más posible a la vista del prototipo" />
-   </children>
-</AnchorPane>
+    <!-- topbar -->
+    <top>
+        <HBox alignment="CENTER_LEFT" styleClass="topbar" spacing="20">
+            <Label text="GrafiMundi" styleClass="titulo"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="Volver" onAction="#volver" styleClass="boton-topbar"/>
+        </HBox>
+    </top>
+
+    <!-- contenido -->
+    <center>
+        <VBox spacing="25" style="-fx-padding: 20;">
+
+            <!-- mensaje superior  -->
+            <VBox maxWidth="1200">
+                <Label text="Tu historial de compras" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+                <Label wrapText="true" style="-fx-font-size: 14px; -fx-text-fill: #555;" text="Aquí puedes ver todos los productos que has comprado en GrafiMundi."/>
+            </VBox>
+
+            <!-- lista -->
+            <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
+
+                <ScrollPane fitToWidth="true" maxWidth="1200" style="-fx-background-color: transparent;">
+
+                    <content>
+                        <VBox fx:id="vxHistorial" spacing="20.0">
+                            <padding>
+                                <Insets top="20" left="20" right="20" bottom="20"/>
+                            </padding>
+                        </VBox>
+                    </content>
+
+                </ScrollPane>
+
+                <!-- mensaje vacio -->
+                <Label fx:id="lblVacio" text="No tienes compras registradas" style="-fx-font-size: 16px; -fx-text-fill: #777;" visible="false"/>
+
+            </VBox>
+
+        </VBox>
+    </center>
+
+    <!-- footer -->
+    <bottom>
+        <HBox alignment="CENTER_LEFT" style="-fx-padding: 15 25;">
+            <Label text="© 2026 GrafiMundi Colombia"
+                   style="-fx-text-fill: #777; -fx-font-size: 13px;"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

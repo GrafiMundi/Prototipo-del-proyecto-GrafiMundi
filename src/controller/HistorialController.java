@@ -1,168 +1,97 @@
 package controller;
 
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 import model.nodoGraficas;
+import model.nodoHistorial;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class HistorialController {
 
+    @FXML
+    private VBox vxHistorial;
+
+    @FXML
+    private Label lblVacio;
+
+    private CatalogoController catalogoController;
+
     // cola
-    private nodoGraficas frente;
-    private nodoGraficas fin;
+    private nodoHistorial frente;
+    private nodoHistorial fin;
 
     private int tamaño;
 
     // constructor
     public HistorialController() {
-
         frente = null;
         fin = null;
-
         tamaño = 0;
     }
 
-    // metodo que agrega la compra al historial
-    public void agregarCompra(
-            nodoGraficas producto
-    ) {
+    // metodo para agregar compra (conceptual aun no conectado al carrito de compras)
+    public void agregarCompra(nodoGraficas producto) {
 
-        producto.sig = null;
+        String fecha = LocalDateTime.now()
+                .format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
 
-        // COLA VACÍA
+        nodoHistorial nuevo = new nodoHistorial(producto, fecha);
+
         if (frente == null) {
-
-            frente = fin = producto;
-
+            frente = fin = nuevo;
         } else {
-
-            fin.sig = producto;
-
-            fin = producto;
+            fin.sig = nuevo;
+            fin = nuevo;
         }
 
         tamaño++;
+
+        actualizarVista();
     }
 
-    // metodo que mostrara la primera compra
-    public nodoGraficas verPrimeraCompra() {
+    // metodo que actualizara la vista 
+    private void actualizarVista() {
 
-        return frente;
-    }
-
-    // metodo que mostrara la ultima compra
-    public nodoGraficas verUltimaCompra() {
-
-        return fin;
-    }
-
-    // metodo que busca la compra
-    public nodoGraficas buscarCompra(
-            String codigo
-    ) {
-
-        nodoGraficas actual = frente;
-
-        while (actual != null) {
-
-            if (actual.getCodigo()
-                    .equals(codigo)) {
-
-                return actual;
-            }
-
-            actual = actual.sig;
-        }
-
-        return null;
-    }
-
-    // metodo que mostrara el historial
-    public void mostrarHistorial() {
+        vxHistorial.getChildren().clear();
 
         if (frente == null) {
-
-            System.out.println(
-                    "No hay compras."
-            );
-
+            lblVacio.setVisible(true);
             return;
         }
 
-        nodoGraficas actual = frente;
+        lblVacio.setVisible(false);
 
-        System.out.println(
-                "\n===== HISTORIAL ====="
-        );
+        nodoHistorial actual = frente;
 
         while (actual != null) {
 
-            System.out.println(
-                    "Código: "
-                    + actual.getCodigo()
-            );
+            nodoGraficas p = actual.getProducto();
 
-            System.out.println(
-                    "Nombre: "
-                    + actual.getNombre()
-            );
+            VBox card = new VBox();
+            card.setStyle("-fx-background-color: white; -fx-padding: 15; -fx-border-color: #ddd; -fx-border-radius: 8;");
+            card.setSpacing(5);
 
-            System.out.println(
-                    "Precio: $"
-                    + actual.getPrecio()
-            );
+            Label nombre = new Label("Producto: " + p.getNombre());
+            Label precio = new Label("Precio: $" + p.getPrecio());
+            Label cantidad = new Label("Cantidad: " + p.getCantidad());
+            Label subtotal = new Label("Subtotal: $" + p.subtotal());
+            Label fecha = new Label("Fecha: " + actual.getFecha());
 
-            System.out.println(
-                    "Cantidad: "
-                    + actual.getCantidad()
-            );
+            card.getChildren().addAll(nombre, precio, cantidad, subtotal, fecha);
 
-            System.out.println(
-                    "Subtotal: $"
-                    + actual.subtotal()
-            );
-
-            System.out.println(
-                    "---------------------"
-            );
+            vxHistorial.getChildren().add(card);
 
             actual = actual.sig;
         }
     }
 
-    // metodo que calcula el total del historial
-    public double calcularTotalHistorial() {
-
-        double total = 0;
-
-        nodoGraficas actual = frente;
-
-        while (actual != null) {
-
-            total += actual.subtotal();
-
-            actual = actual.sig;
+    @FXML
+    private void volver() {
+        if (catalogoController != null) {
+            catalogoController.mostrarCatalogo();
         }
-
-        return total;
-    }
-
-    // metodo que obtiene la cantidad de compras
-    public int obtenerTamaño() {
-
-        return tamaño;
-    }
-
-    // metodo que verifica si la cola esta vacia
-    public boolean estaVacia() {
-
-        return frente == null;
-    }
-
-    // metodo que vacia el historial
-    public void vaciarHistorial() {
-
-        frente = null;
-
-        fin = null;
-
-        tamaño = 0;
     }
 }
