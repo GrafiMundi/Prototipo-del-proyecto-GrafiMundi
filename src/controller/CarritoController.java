@@ -11,6 +11,7 @@ import model.ListaGraficas;
 import model.nodoGraficas;
 import servicios.CarritoService;
 import servicios.GraficaService;
+import servicios.historialService;
 
 public class CarritoController implements Initializable {
 
@@ -152,7 +153,7 @@ public class CarritoController implements Initializable {
                                 "Error",
                                 "No hay suficiente stock para: " + aux.getNombre()
                         );
-                        return; // detener compra
+                        return;
                     }
                 }
 
@@ -181,10 +182,21 @@ public class CarritoController implements Initializable {
             }
         }
 
-        // guardar cambios en el txt
+        // guardar cambios
         GraficaService.guardarLista(lista);
 
-        // alerta de compra exitosa
+        for (Node node : contenedorCarrito.getChildren()) {
+
+            ItemCarritoController item
+                    = (ItemCarritoController) node.getUserData();
+
+            historialService.registrarCompraIndividual(
+                    item.getProducto(),
+                    item.getCantidad()
+            );
+        }
+
+        // alerta
         mostrarAlerta(
                 "Compra exitosa",
                 "La compra se realizó correctamente. Gracias por comprar con nosotros"
@@ -196,7 +208,6 @@ public class CarritoController implements Initializable {
         actualizarEstadoVacio();
         actualizarTotales();
 
-        // recargar catalogo
         if (catalogoController != null) {
             catalogoController.recargarCatalogo();
         }

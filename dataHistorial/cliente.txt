@@ -1,0 +1,40 @@
+----- ITEM -----
+Fecha: 28/05/2026 22:29
+Producto: Gigabyte GeForce 700 Series GT 710 2GB
+Cantidad: 3
+Precio: 339000
+Imagen: 005.png
+------------------
+
+----- ITEM -----
+Fecha: 28/05/2026 22:29
+Producto: ASRock Intel Arc A580 Challenger 8GB GDDR6
+Cantidad: 1
+Precio: 1864621
+Imagen: 008.png
+------------------
+
+----- ITEM -----
+Fecha: 28/05/2026 22:29
+Producto: NVIDIA GeForce RTX 5050 Dual Fan 8GB
+Cantidad: 1
+Precio: 1130998
+Imagen: 007.png
+------------------
+
+----- ITEM -----
+Fecha: 28/05/2026 22:29
+Producto: Gigabyte GeForce RTX 5070
+Cantidad: 1
+Precio: 2320409
+Imagen: 006.png
+------------------
+
+----- ITEM -----
+Fecha: 28/05/2026 23:09
+Producto: Gigabyte GeForce RTX 5070
+Cantidad: 1
+Precio: 2320409
+Imagen: 006.png
+------------------
+

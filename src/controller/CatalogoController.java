@@ -202,6 +202,7 @@ public class CatalogoController implements Initializable {
                     ex.printStackTrace();
                 }
             });
+
         } else {
 
             // texto normal para clientes
@@ -209,14 +210,27 @@ public class CatalogoController implements Initializable {
 
             // accion historial
             opcionPrincipal.setOnAction(e -> {
+                try {
 
-                System.out.println("abrir historial");
+                    FXMLLoader loader = new FXMLLoader(
+                            getClass().getResource("/view/historial.fxml")
+                    );
+
+                    Parent vistaHistorial = loader.load();
+
+                    HistorialController historialController = loader.getController();
+                    historialController.setCatalogoController(this);
+
+                    rootContainer.getChildren().setAll(vistaHistorial);
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             });
         }
 
         // opcion cerrar sesion
         MenuItem cerrar = new MenuItem("Cerrar sesión");
-
         cerrar.getStyleClass().add("item-cerrar");
 
         // accion cerrar sesion
@@ -235,7 +249,6 @@ public class CatalogoController implements Initializable {
 
         // mostrar menu debajo del boton
         btnUsuario.setOnAction(e -> {
-
             menu.show(btnUsuario, Side.BOTTOM, 0, 5);
         });
     }
@@ -577,7 +590,7 @@ public class CatalogoController implements Initializable {
         img.setFitHeight(242);
         img.setPreserveRatio(false);
 
-        //nombre
+        // nombre
         Label nombre = new Label(g.nombre);
         nombre.setWrapText(true);
         nombre.setMinHeight(40);

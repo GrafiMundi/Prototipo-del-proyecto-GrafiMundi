@@ -14,7 +14,7 @@
 
     <!-- topbar -->
     <top>
-        <HBox alignment="CENTER_LEFT" styleClass="topbar">
+        <HBox alignment="CENTER_LEFT" spacing="15" styleClass="topbar">
             <children>
                 <Label styleClass="titulo" text="GrafiMundi" />
                 <Region HBox.hgrow="ALWAYS" />
@@ -25,19 +25,15 @@
 
     <!-- info -->
     <center>
-        <VBox spacing="20" style="-fx-padding: 30;">
+        <VBox spacing="25" style="-fx-padding: 20;">
 
-            <VBox alignment="CENTER_LEFT"
-                  spacing="5"
-                  minHeight="80"
-                  prefHeight="80"
-                  maxHeight="80">
+            <VBox alignment="CENTER_LEFT" spacing="5" maxWidth="1200" minHeight="80" prefHeight="80" maxHeight="80">
 
                 <!-- mensaje superior -->
-                <Label style="-fx-font-size: 18px; -fx-font-weight: bold;"
+                <Label style="-fx-font-size: 22px; -fx-font-weight: bold;"
                        text="¡Ya casi es tuyo con GrafiMundi!" />
                 <Label alignment="CENTER"
-                       maxWidth="800" style="-fx-font-size: 14px; -fx-text-fill: #555;"
+                       maxWidth="800" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #555555;"
                        text="Estás a un paso de potenciar tu setup. En GrafiMundi te ofrecemos tecnología de alto rendimiento para llevar tu equipo al siguiente nivel. Finaliza tu compra y hazlo realidad."
                        wrapText="true" />
             </VBox>
@@ -48,7 +44,7 @@
             <!-- contenido principal -->
             <HBox alignment="TOP_CENTER" spacing="30">
                 <children>
-
+                
                     <!-- zona izquierda -->
                     <VBox alignment="TOP_CENTER" prefWidth="900" spacing="15" VBox.vgrow="ALWAYS">
                         <children>

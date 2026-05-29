@@ -112,6 +112,7 @@ public class IniciarSesionFormController implements Initializable {
 
             // abrir catalogo maximizado
             cambiarVista("/view/Catalogo.fxml", event);
+            
 
         } else {
 
@@ -138,14 +139,12 @@ public class IniciarSesionFormController implements Initializable {
 
             stageActual.close();
 
-            Stage nuevoStage = new Stage();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
-            nuevoStage.setScene(new Scene(root));
-
-            nuevoStage.setMaximized(true);
-
-            nuevoStage.show();
-
+            stage.setScene(new Scene(root));
+            stage.setMaximized(true);
+            stage.show();
+            
         } catch (Exception e) {
 
             System.out.println("error al cambiar de vista");

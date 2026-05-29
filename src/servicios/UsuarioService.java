@@ -142,6 +142,8 @@ public class UsuarioService {
         // guardar usuario actual si el login es correcto
         if (user != null) {
             usuarioActual = user;
+            
+            historialService.inicializarHistorialUsuario();
         }
 
         return user;

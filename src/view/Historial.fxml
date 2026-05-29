@@ -6,17 +6,17 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml" xmlns="http://javafx.com/javafx/25" fx:controller="controller.HistorialController" stylesheets="@../styles/catalogo.css" styleClass="root" prefWidth="1000" prefHeight="700">
+<BorderPane prefHeight="700" prefWidth="1000" styleClass="root" stylesheets="@../styles/catalogo.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.HistorialController">
 
     <!-- topbar -->
     <top>
-        <HBox alignment="CENTER_LEFT" styleClass="topbar" spacing="20">
-            <Label text="GrafiMundi" styleClass="titulo"/>
-            <Region HBox.hgrow="ALWAYS"/>
-            <Button text="Volver" onAction="#volver" styleClass="boton-topbar"/>
+        <HBox alignment="CENTER_LEFT" spacing="20" styleClass="topbar">
+            <Label styleClass="titulo" text="GrafiMundi" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Button onAction="#volver" styleClass="boton-topbar" text="Volver" />
         </HBox>
     </top>
 
@@ -26,20 +26,20 @@
 
             <!-- mensaje superior  -->
             <VBox maxWidth="1200">
-                <Label text="Tu historial de compras" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+                <Label style="-fx-font-size: 22px; -fx-font-weight: bold;" text="Tu historial de compras" />
 
-                <Label wrapText="true" style="-fx-font-size: 14px; -fx-text-fill: #555;" text="Aquí puedes ver todos los productos que has comprado en GrafiMundi."/>
+                <Label style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #555555;" text="Aquí puedes ver todos los productos que has comprado en GrafiMundi." wrapText="true" />
             </VBox>
 
             <!-- lista -->
             <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
 
-                <ScrollPane fitToWidth="true" maxWidth="1200" style="-fx-background-color: transparent;">
+                <ScrollPane fitToWidth="true" maxWidth="1200" prefHeight="500.0"  prefWidth="960.0" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent;">
 
                     <content>
-                        <VBox fx:id="vxHistorial" spacing="20.0">
+                        <VBox fx:id="vxHistorial" spacing="20.0" fillWidth="true">
                             <padding>
-                                <Insets top="20" left="20" right="20" bottom="20"/>
+                                <Insets bottom="20" left="20" right="20" top="20" />
                             </padding>
                         </VBox>
                     </content>
@@ -47,7 +47,7 @@
                 </ScrollPane>
 
                 <!-- mensaje vacio -->
-                <Label fx:id="lblVacio" text="No tienes compras registradas" style="-fx-font-size: 16px; -fx-text-fill: #777;" visible="false"/>
+                <Label fx:id="lblVacio" style="-fx-font-size: 16px; -fx-text-fill: #777;" text="No tienes compras registradas" visible="false" />
 
             </VBox>
 
@@ -57,8 +57,7 @@
     <!-- footer -->
     <bottom>
         <HBox alignment="CENTER_LEFT" style="-fx-padding: 15 25;">
-            <Label text="© 2026 GrafiMundi Colombia"
-                   style="-fx-text-fill: #777; -fx-font-size: 13px;"/>
+            <Label style="-fx-text-fill: #777; -fx-font-size: 13px;" text="© 2026 GrafiMundi Colombia" />
         </HBox>
     </bottom>
 
