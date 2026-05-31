@@ -14,6 +14,12 @@ public class GrafiMundiViewController implements Initializable {
     // contenedor dinámico donde se cargan las vistas (login y registro)
     @FXML
     private StackPane containerForm;
+    
+    @FXML
+    private Button btnRegistro;
+    
+    @FXML
+    private Button btnLogin;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {

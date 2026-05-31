@@ -20,13 +20,17 @@ public class GraficaService {
             while ((linea = br.readLine()) != null) {
 
                 // si la línea está vacía, se ignora
-                if (linea.trim().isEmpty()) continue;
+                if (linea.trim().isEmpty()) {
+                    continue;
+                }
 
                 // se separan los datos usando ";"
                 String[] d = linea.split(";");
 
                 // si la línea no tiene todos los datos necesarios, se ignora
-                if (d.length < 7) continue;
+                if (d.length < 7) {
+                    continue;
+                }
 
                 // se crea un nodo con los datos leídos
                 nodoGraficas nodo = new nodoGraficas(
@@ -58,17 +62,24 @@ public class GraficaService {
 
         // se abre el archivo en modo escritura
         try (BufferedWriter bw = new BufferedWriter(new FileWriter("dataGraficas/graficas.txt"))) {
+
+            java.text.DecimalFormatSymbols symbols = new java.text.DecimalFormatSymbols(java.util.Locale.US);
+            java.text.DecimalFormat df = new java.text.DecimalFormat("0.0", symbols);
+
             nodoGraficas aux = lista.inicio;
+
             while (aux != null) {
 
+                String precioFormateado = df.format(aux.precio);
+
                 // se construye la línea con el mismo formato del archivo
-                String linea = aux.codigo + ";" +
-                               aux.nombre + ";" +
-                               aux.precio + ";" +
-                               aux.descripcion + ";" +
-                               aux.marca + ";" +
-                               aux.cantidad + ";" +
-                               aux.imagen;
+                String linea = aux.codigo + ";"
+                        + aux.nombre + ";"
+                        + precioFormateado + ";"
+                        + aux.descripcion + ";"
+                        + aux.marca + ";"
+                        + aux.cantidad + ";"
+                        + aux.imagen;
 
                 // se escribe la línea en el archivo
                 bw.write(linea);

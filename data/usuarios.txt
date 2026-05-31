@@ -1,3 +1,2 @@
 admin@grafimundi.com,admin,1234,admin
 cliente@gmail.com,cliente,1234,cliente
-coolin@gmail.com,coolin,coolin3,cliente

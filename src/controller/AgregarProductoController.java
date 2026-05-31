@@ -5,18 +5,36 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
+import javafx.scene.control.TextFormatter;
+import java.util.function.UnaryOperator;
+
 import model.nodoGraficas;
 
 public class AgregarProductoController {
 
-    @FXML private TextField txtCodigo;
-    @FXML private TextField txtNombre;
-    @FXML private TextField txtPrecio;
-    @FXML private TextArea txtDescripcion;
-    @FXML private ComboBox<String> comboMarca;
-    @FXML private TextField txtCantidad;
-    @FXML private TextField txtImagen;
-    @FXML private Label lblModo;
+    @FXML
+    private TextField txtCodigo;
+    
+    @FXML
+    private TextField txtNombre;
+    
+    @FXML
+    private TextField txtPrecio;
+    
+    @FXML
+    private TextArea txtDescripcion;
+    
+    @FXML
+    private ComboBox<String> comboMarca;
+    
+    @FXML
+    private TextField txtCantidad;
+    
+    @FXML
+    private TextField txtImagen;
+    
+    @FXML
+    private Label lblModo;
 
     private CatalogoController catalogoController;
 
@@ -44,31 +62,52 @@ public class AgregarProductoController {
         });
 
         // formato de tipo moneda en el precio
-        txtPrecio.textProperty().addListener((obs, oldValue, newValue) -> {
+        UnaryOperator<TextFormatter.Change> filtro = change -> {
 
-            if (newValue == null || newValue.isEmpty()) return;
+            String nuevoTexto = change.getControlNewText();
 
-            String limpio = newValue.replaceAll("[^\\d]", "");
+            // permitir vacío
+            if (nuevoTexto.isEmpty()) {
+                return change;
+            }
+
+            // limpiar todo menos números
+            String limpio = nuevoTexto.replaceAll("[^\\d]", "");
+
+            if (limpio.isEmpty()) {
+                change.setText("");
+                return change;
+            }
 
             try {
-                if (!limpio.isEmpty()) {
-                    double valor = Double.parseDouble(limpio);
-                    String formateado = "$ " + String.format("%,.0f", valor);
+                long valor = Long.parseLong(limpio);
 
-                    if (!newValue.equals(formateado)) {
-                        txtPrecio.setText(formateado);
-                        txtPrecio.positionCaret(formateado.length());
-                    }
-                }
+                // formatear con separadores
+                String formateado = "$ " + String.format("%,d", valor);
+
+                // reemplazar el texto
+                change.setRange(0, change.getControlText().length());
+                change.setText(formateado);
+
+                // mover cursor al final
+                change.setCaretPosition(formateado.length());
+                change.setAnchor(formateado.length());
+
+                return change;
+
             } catch (Exception e) {
-                txtPrecio.setText("");
+                return null;
             }
-        });
+        };
+
+        txtPrecio.setTextFormatter(new TextFormatter<>(filtro));
     }
 
     private void buscarProducto(String codigo) {
 
-        if (codigo.isEmpty() || catalogoController == null) return;
+        if (codigo.isEmpty() || catalogoController == null) {
+            return;
+        }
 
         nodoGraficas existente = catalogoController
                 .getLista()
@@ -80,7 +119,7 @@ public class AgregarProductoController {
             lblModo.setStyle("-fx-text-fill: orange;");
 
             txtNombre.setText(existente.nombre);
-            txtPrecio.setText("$ " + String.format("%,.0f", existente.precio));
+            txtPrecio.setText(String.valueOf((long) existente.precio));
             txtDescripcion.setText(existente.descripcion);
             comboMarca.setValue(existente.marca);
             txtImagen.setText(existente.imagen);
